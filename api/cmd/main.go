@@ -3,10 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
-
 	"net/http"
 
-	"../router"
+	"github.com/alallema/picture_dictionnary.git/api/router"
 )
 
 func main() {

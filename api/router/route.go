@@ -3,8 +3,7 @@ package router
 import (
 	"net/http"
 
-	"../service"
-
+	"github.com/alallema/picture_dictionnary.git/api/service"
 	"github.com/gorilla/mux"
 )
 
