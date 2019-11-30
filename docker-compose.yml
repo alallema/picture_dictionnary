@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./tmp/redis:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
+
+  api:
+    build: ./api/
+    command: ["./main"]
+    # depends_on:
+    #   - "redis"
+    ports:
+      - "8080:8080"
+    # environment:
+    #   - REDIS_HOST=redis
+    #   - DEBUG_ENVIRONMENT=true
