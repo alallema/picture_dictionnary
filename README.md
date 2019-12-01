@@ -5,7 +5,7 @@ The goal is to labelise pictures from choosen source download and reference them
 
 ## Architecture
 
-Architecture schemas - Todo
+![Architecture](docs/Architecture.jpg)
 
 ## Getting Started
 
@@ -83,10 +83,10 @@ HASH    key field value
 
 ```
 KEY     midlang:/m/0bt9lr
-FIELD   1) "fr"
-        2) "chien"
-        3) "en"
-        4) "dog"
+FIELD   1) "en"
+        2) "dog"
+        3) "fr"
+        4) "chien"
         5) "de"
         6) "hund"
         7) "es"
