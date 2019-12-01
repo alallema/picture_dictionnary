@@ -3,7 +3,27 @@
 This project is search engine of picture and video for mood board
 The goal is to labelise pictures from choosen source download and reference them to be able to retrieve interesting data by word or mood
 
-## Architecture
+### Code Architecture
+
+This projects try to follow *hexagonal architecture* principles. So:
+
+*  Domain part is placed inside \<subproject\>/service
+*  Dependency injection is done inside \<subproject\>/cmd/main.go
+*  Mostly, the other directories inside subprojects are adapters
+
+Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services or batch scripts running in production should be inside this repo. Let's take a look of each folder:
+
+* In **api**, we have the service that allows us to make request to the picture-dictionnary
+
+* In **vision-client**, we have an dev client that retreive all images informations request to google-cloud-vision
+
+* In **redis-client**, we have an dev client that post and get all informations from redis datastore
+
+* In **core**, there is useful structs or constant useful and shared between subproject
+
+**Docker** Have to be remade for now it's just launch redis datastore and api
+
+## General architecture overview
 
 ![Architecture](docs/Architecture.jpg)
 
@@ -20,11 +40,10 @@ In order to bring up:
 - Launch redis-shell `docker exec -it redis redis-cli`
 - See database `CONFIG GET databases`
 - See keyspace `INFO keyspace`
-- Check Api on http://localhost:8080/
+- Visit http://localhost:8080/ to check api
 - In order to clean up the cluster, use `docker-compose down`
 
 ## Redis Structure
-
 
 HASH    key field value
 - Picture data
