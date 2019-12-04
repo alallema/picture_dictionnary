@@ -1,4 +1,4 @@
-package service
+package api
 
 import (
 	"fmt"
@@ -33,17 +33,18 @@ func DetectLabels(conf Config) ([]service.LabelData, error) {
 	} else {
 		for _, annotation := range annotations {
 			label := service.LabelData{
-				Mid:         annotation.Mid,
+				Id:          annotation.Mid,
 				Description: annotation.Description,
 				Score:       annotation.Score,
 				Confidence:  annotation.Confidence,
 				Topicality:  annotation.Topicality,
-				Locale:      annotation.Locale,
+				Language:    "en",
 			}
 			labels = append(labels, label)
 		}
 	}
 	// os.File(conf.File).Close()
+	// TODO close file
 	return labels, err
 }
 
@@ -66,7 +67,7 @@ func LocalizeObjects(conf Config) ([]service.LocalizedObjectData, error) {
 
 	for _, annotation := range annotations {
 		object := service.LocalizedObjectData{
-			Mid:   annotation.Mid,
+			Id:    annotation.Mid,
 			Name:  annotation.Name,
 			Score: annotation.Score,
 		}
@@ -81,5 +82,6 @@ func LocalizeObjects(conf Config) ([]service.LocalizedObjectData, error) {
 	}
 
 	// os.File(conf.File).Close()
+	// TODO close file
 	return objects, err
 }
