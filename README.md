@@ -3,15 +3,17 @@
 This project is search engine of picture and video for mood board
 The goal is to labelise pictures from choosen source download and reference them to be able to retrieve interesting data by word or mood
 
+## Architecture
+
 ### Code Architecture
 
-This projects try to follow *hexagonal architecture* principles. So:
+This projects try to create module that can be changed easily for another solution, for each module:
 
 *  Domain part is placed inside \<subproject\>/service
 *  Dependency injection is done inside \<subproject\>/cmd/main.go
 *  Mostly, the other directories inside subprojects are adapters
 
-Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services or batch scripts running in production should be inside this repo. Let's take a look of each folder:
+Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services running in production should be inside this repo. Let's take a look of each folder:
 
 * In **api**, we have the service that allows us to make request to the picture-dictionnary
 
@@ -23,7 +25,7 @@ Picture Dictionnary follows the principle of **Monorepo** strategy, this means t
 
 **Docker** Have to be remade for now it's just launch redis datastore and api
 
-## General architecture overview
+### General architecture overview
 
 ![Architecture](docs/Architecture.jpg)
 
@@ -66,7 +68,19 @@ ZSET    key field value
 - key is PictureId Field is mid zscore
 
 ```
-KEY     19461332
+KEY     pictureIdLabel:19461332
+FIELD   1) "/m/0bt9lr"
+        2) "/m/01pm38"
+        3) "/m/04rky"
+        4) "/m/02wbgd"
+        5) "/m/09686"
+```
+
+ZSET    key field value
+- key is PictureId Field is mid zscore
+
+```
+KEY     pictureIdObject:19461332
 FIELD   1) "/m/0bt9lr"
         2) "/m/01pm38"
         3) "/m/04rky"
@@ -78,7 +92,19 @@ SET     key member [member ...]
  - key is mid return all mid
 
 ```
-KEY     Mid
+KEY     labelId
+MEMBER  1) "/m/0bt9lr"
+        2) "/m/01pm38"
+        3) "/m/04rky"
+        4) "/m/02wbgd"
+        5) "/m/09686"
+```
+
+SET     key member [member ...]
+ - key is mid return all mid
+
+```
+KEY     objectId
 MEMBER  1) "/m/0bt9lr"
         2) "/m/01pm38"
         3) "/m/04rky"
@@ -90,7 +116,7 @@ SET     key member [member ...]
  - key is mid, value is image id
 
 ```
-KEY     Mid:/m/0bt9lr
+KEY     Id:/m/0bt9lr
 MEMBER  1) "19461156"
         2) "19461153"
         3) "19461154"
@@ -101,7 +127,19 @@ MEMBER  1) "19461156"
 HASH    key field value
 
 ```
-KEY     midlang:/m/0bt9lr
+KEY     labelDescr:/m/0bt9lr
+FIELD   1) "en"
+        2) "dog"
+        3) "fr"
+        4) "chien"
+        5) "de"
+        6) "hund"
+        7) "es"
+        8) "perro"
+```
+
+```
+KEY     objectDescr:/m/0bt9lr
 FIELD   1) "en"
         2) "dog"
         3) "fr"
