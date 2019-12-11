@@ -1,13 +1,8 @@
-package service
+package server
 
 import (
 	"time"
 )
-
-type heartbeatResponse struct {
-	Status string `json:"status"`
-	Code   int    `json:"code"`
-}
 
 //** Picture data **//
 
@@ -22,7 +17,7 @@ type Picture struct {
 }
 
 type GetPictureResponse struct {
-	Picture Picture `json:"Picture"`
+	Pictures []Picture `json:"Picture"`
 }
 
 type AllPicturesResponse struct {
@@ -32,20 +27,19 @@ type AllPicturesResponse struct {
 //** Tag data **//
 
 type Tag struct {
-	Id    int    `json:"id"`
+	Id    string `json:"id"`
 	Title string `json:"title"`
 }
 
-type AllTags struct {
-	Tags []Tag `json:"Tags"`
-}
-
-type GetTagResponse struct {
-	Picture Picture `json:"Picture"`
-}
-
 type AllTagsResponse struct {
-	Pictures []Picture `json:"Pictures"`
+	Tags []Tag `json:"Pictures"`
+}
+
+// Pulse Response
+
+type heartbeatResponse struct {
+	Status string `json:"status"`
+	Code   int    `json:"code"`
 }
 
 //** ERROR **//
