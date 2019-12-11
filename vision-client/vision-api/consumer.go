@@ -1,4 +1,4 @@
-package api
+package vision_api
 
 import (
 	"fmt"
@@ -6,17 +6,10 @@ import (
 
 	vision "cloud.google.com/go/vision/apiv1"
 	"github.com/alallema/picture_dictionnary.git/core/service"
+	config "github.com/alallema/picture_dictionnary.git/vision-client/service"
 )
 
-func (conf Config) GetClient() *vision.ImageAnnotatorClient {
-	client, err := vision.NewImageAnnotatorClient(conf.Ctx)
-	if err != nil {
-		log.Fatalf("Failed to create client:  %v", err)
-	}
-	return client
-}
-
-func DetectLabels(conf Config) ([]service.LabelData, error) {
+func DetectLabels(conf config.Config) ([]service.LabelData, error) {
 	var labels []service.LabelData
 
 	image, err := vision.NewImageFromReader(conf.File)
@@ -48,7 +41,7 @@ func DetectLabels(conf Config) ([]service.LabelData, error) {
 	return labels, err
 }
 
-func LocalizeObjects(conf Config) ([]service.LocalizedObjectData, error) {
+func LocalizeObjects(conf config.Config) ([]service.LocalizedObjectData, error) {
 	var objects []service.LocalizedObjectData
 
 	image, err := vision.NewImageFromReader(conf.File)
@@ -67,9 +60,10 @@ func LocalizeObjects(conf Config) ([]service.LocalizedObjectData, error) {
 
 	for _, annotation := range annotations {
 		object := service.LocalizedObjectData{
-			Id:    annotation.Mid,
-			Name:  annotation.Name,
-			Score: annotation.Score,
+			Id:       annotation.Mid,
+			Name:     annotation.Name,
+			Score:    annotation.Score,
+			Language: "en",
 		}
 
 		for _, v := range annotation.BoundingPoly.NormalizedVertices {
