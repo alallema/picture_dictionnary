@@ -16,7 +16,7 @@ For each module:
 *  Dependency injection is done inside \<subproject\>/cmd/main.go
 *  Mostly, the other directories inside subprojects are adapters
 
-Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services running in production should be inside this repo. Let's take a look of each folder:
+Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services running in production should be inside this repo Except Api and Redis Datastore. Let's take a look of each folder:
 
 * In **api**, we have the service that allows us to make request to the picture-dictionnary
 
@@ -61,7 +61,7 @@ FIELD   1) "id"
         4) "img_657.jpg"
         5) "path"
         6) "/path/img_657.jpg"
-        7) "Source"
+        7) "source"
         8) "instagram:Lala"
         9) "format"
         10) "jpg"
@@ -156,9 +156,11 @@ FIELD   1) "en"
 ## API
 
 - GET /pulse — heartbeat check if our API is online
-- GET /pictures(#get-pictures) — fetch all pictures from the database
+- GET /pictures(#get-pictures) — fetch all pictures from the database (Not implement yet)
 - GET /picture/[tag] — fetch pictures by tag from the database
-- GET /tags - fetch all tags from database
+- GET /tags - fetch all labels and objects from database
+- GET /labels - fetch all labels from database
+- GET /objects - fetch all objects from database
 
 ## To do
 
