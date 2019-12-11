@@ -15,10 +15,10 @@ services:
   api:
     build: ./api/
     command: ["./main"]
-    # depends_on:
-    #   - "redis"
+    depends_on:
+      - "redis"
     ports:
       - "8080:8080"
-    # environment:
-    #   - REDIS_HOST=redis
-    #   - DEBUG_ENVIRONMENT=true
+    environment:
+      - REDIS_HOST=redis
+      - DEBUG_ENVIRONMENT=true

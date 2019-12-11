@@ -7,7 +7,10 @@ The goal is to labelise pictures from choosen source download and reference them
 
 ### Code Architecture
 
-This projects try to create module that can be changed easily for another solution, for each module:
+This projects try to create module that can be changed easily for another solution
+It's means that every modules has to use or translate his data by core(lib) data structure
+At the end the goal is that every module could run like micro services
+For each module:
 
 *  Domain part is placed inside \<subproject\>/service
 *  Dependency injection is done inside \<subproject\>/cmd/main.go
