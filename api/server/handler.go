@@ -30,6 +30,7 @@ func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	id := vars["tag"]
+	id = "/m/" + id
 	pictureList = server.PictureByTag(id)
 	if len(*pictureList) != 0 {
 		json.NewEncoder(w).Encode(GetPictureResponse{Pictures: *pictureList})
