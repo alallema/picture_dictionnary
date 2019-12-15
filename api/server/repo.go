@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/go-redis/redis"
 	"github.com/rs/zerolog/log"
 )
@@ -58,18 +56,48 @@ func (server *Server) AllObjects() *[]Tag {
 func (server *Server) PictureByTag(id string) *[]Picture {
 	var pictureList []Picture
 
-	resultRequest, err := server.Client.ZRangeByScore("Id:"+string(id), redis.ZRangeBy{
-		Min:    "-inf",
-		Max:    "+inf",
-		Offset: 0,
-	}).Result()
-	fmt.Println(resultRequest)
+	resultRequest, err := server.Client.SMembers("Id:"+string(id)).Result()
 	if err == redis.Nil {
 		log.Warn().Msg("key does not exist")
 	} else if err != nil {
 		log.Error().Err(err)
 	} else if len(resultRequest) == 0 {
 		log.Info().Str("picture", string(id)).Msg("No result this picture")
+	}
+	for _, pictureId := range resultRequest {
+		var picture Picture
+
+		pictures, err := server.Client.HGetAll("picture:"+pictureId).Result()
+		if err == redis.Nil {
+			log.Error().Err(err).Msg("Picture doesn't exist")
+		} else if err != nil {
+			log.Error().Err(err)
+		} else {
+			for i, pict := range pictures {
+				if i == "id" {
+					picture.Id = pict
+				}
+				if i == "title" {
+					picture.Title = pict
+				}
+				if i == "format" {
+					picture.Format = pict
+				}
+				if i == "picturePath" {
+					picture.PicturePath = pict
+				}
+				if i == "pictureURL" {
+					picture.PictureURL = pict
+				}
+				if i == "picturePath" {
+					picture.PicturePath = pict
+				}
+				if i == "source" {
+					picture.Source = pict
+				}
+			}
+		}
+		pictureList = append(pictureList, picture)
 	}
 	return &pictureList
 }

@@ -7,11 +7,12 @@ import (
 //** Picture data **//
 
 type Picture struct {
-	Id          int       `json:"id"`
+	Id          string    `json:"id"`
 	Title       string    `json:"Title"`
 	Format      string    `json:"Format"`
 	Source      string    `json:"Source"`
 	PictureURL  string    `json:"mainPictureURL"`
+	PicturePath string    `json:"mainPicturePath"`
 	CreatedDate time.Time `json:"createdDate"`
 	EndDate     time.Time `json:"endDate"`
 }

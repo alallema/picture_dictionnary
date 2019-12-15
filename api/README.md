@@ -20,6 +20,7 @@ Don't need it if you launch it with docker
 * ```go get github.com/gorilla/mux```
 * ```go get github.com/rs/zerolog```
 * ```go get github.com/caarlos0/env```
+* [install and launch redis](https://redis.io/topics/quickstart)
 * ```go run main.go```
 
 ## Dependencies
