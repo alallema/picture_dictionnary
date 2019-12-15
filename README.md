@@ -19,12 +19,15 @@ For each module:
 Picture Dictionnary follows the principle of **Monorepo** strategy, this means that all (micro)services running in production should be inside this repo Except Api and Redis Datastore. Let's take a look of each folder:
 
 * In **api**, we have the service that allows us to make request to the picture-dictionnary
+This is for now the only service to be independent
 
 * In **vision-client**, we have an dev client that retreive all images informations request to google-cloud-vision
 
 * In **redis-client**, we have an dev client that post and get all informations from redis datastore
 
 * In **core**, there is useful structs or constant useful and shared between subproject
+
+* In **scraper**, not implement yet but has to scrap picture and video from differents sources. So they will be surely multiple scraper
 
 **Docker** Have to be remade for now it's just launch redis datastore and api
 
@@ -80,6 +83,7 @@ In order to bring up:
 * Api Go
     - implement test
     - try picture by label request
+    - change implementation Api has to request from Core/lib
 
 * Object Storage
     - check documentation
