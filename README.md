@@ -48,111 +48,6 @@ In order to bring up:
 - Visit http://localhost:8080/ to check api
 - In order to clean up the cluster, use `docker-compose down`
 
-## Redis Structure
-
-HASH    key field value
-- Picture data
-
-```
-KEY     picture:"98asdjw2"
-FIELD   1) "id"
-        2) "19461154"
-        3) "title"
-        4) "img_657.jpg"
-        5) "path"
-        6) "/path/img_657.jpg"
-        7) "source"
-        8) "instagram:Lala"
-        9) "format"
-        10) "jpg"
-```
-
-ZSET    key field value
-- key is PictureId Field is mid zscore
-
-```
-KEY     pictureIdLabel:19461332
-FIELD   1) "/m/0bt9lr"
-        2) "/m/01pm38"
-        3) "/m/04rky"
-        4) "/m/02wbgd"
-        5) "/m/09686"
-```
-
-ZSET    key field value
-- key is PictureId Field is mid zscore
-
-```
-KEY     pictureIdObject:19461332
-FIELD   1) "/m/0bt9lr"
-        2) "/m/01pm38"
-        3) "/m/04rky"
-        4) "/m/02wbgd"
-        5) "/m/09686"
-```
-
-SET     key member [member ...]
- - key is mid return all mid
-
-```
-KEY     labelId
-MEMBER  1) "/m/0bt9lr"
-        2) "/m/01pm38"
-        3) "/m/04rky"
-        4) "/m/02wbgd"
-        5) "/m/09686"
-```
-
-SET     key member [member ...]
- - key is mid return all mid
-
-```
-KEY     objectId
-MEMBER  1) "/m/0bt9lr"
-        2) "/m/01pm38"
-        3) "/m/04rky"
-        4) "/m/02wbgd"
-        5) "/m/09686"
-```
-
-SET     key member [member ...]
- - key is mid, value is image id
-
-```
-KEY     Id:/m/0bt9lr
-MEMBER  1) "19461156"
-        2) "19461153"
-        3) "19461154"
-        4) "19461155"
-        5) "19461156"
-```
-
-HASH    key field value
-
-```
-KEY     labelDescr:/m/0bt9lr
-FIELD   1) "en"
-        2) "dog"
-        3) "fr"
-        4) "chien"
-        5) "de"
-        6) "hund"
-        7) "es"
-        8) "perro"
-```
-
-```
-KEY     objectDescr:/m/0bt9lr
-FIELD   1) "en"
-        2) "dog"
-        3) "fr"
-        4) "chien"
-        5) "de"
-        6) "hund"
-        7) "es"
-        8) "perro"
-```
-
 ## API
 
 - GET /pulse — heartbeat check if our API is online
@@ -162,38 +57,42 @@ FIELD   1) "en"
 - GET /labels - fetch all labels from database
 - GET /objects - fetch all objects from database
 
+## Redis Structure and API
+
+- See README.md inside Api directory
+
 ## To do
 
-- Dockerise environment
-- create logger error - logger history ?
+- create logger error - api done - service todo
 
 * Check
     - check picture size
+    - check video size
+    - check format picture : 
+    - and video : .MOV, .MPEG4, .MP4 et .AVI
     - encodage base64 ?
 
 * Client api vision
-    - send picture request
-    - get resp from api
-    - stock response
+    - finish implement video request
     - see how it's for video
+    - finish test implementation
 
 * Api Go
-    - create clean function to get data from db
-    - create function to get request
+    - implement test
+    - try picture by label request
 
-* Database
-    - launch db
-    - organize it
+* Object Storage
+    - check documentation
+    - choose objectstorage service
 
 * Web app
     - ???
-
-Labeling pictures
-Labeling Video
-Download instagram Vimeo
-Check instagram api
 
 * Create and Dockerise analyzer
     - Detection
     - Indexation
     - Search indexation
+
+* Collector
+    - implement from directory
+    - implement scrapping data
