@@ -3,9 +3,9 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
+	"net/http"
 )
 
 func Heartbeat(w http.ResponseWriter, r *http.Request) {
