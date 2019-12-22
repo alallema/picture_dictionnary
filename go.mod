@@ -10,6 +10,8 @@ require (
 	github.com/google/go-cmp v0.3.1
 	github.com/gorilla/mux v1.7.3
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
+	github.com/onsi/ginkgo v1.11.0 // indirect
+	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/rs/zerolog v1.17.2
 	go.opencensus.io v0.22.2 // indirect
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect

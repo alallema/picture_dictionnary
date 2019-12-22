@@ -1,6 +1,11 @@
 package service
 
-import "time"
+import (
+	"github.com/golang/protobuf/ptypes/duration"
+	"time"
+)
+
+//** Vision for Picture Data Structure **//
 
 type LabelData struct {
 	Id          string
@@ -52,6 +57,36 @@ type Picture struct {
 	PicturePath string    `json:"PicturePath"`
 	PictureURL  string    `json:"PictureURL"`
 	CreatedDate time.Time `json:"createdDate"`
+}
+
+//** Vision for Video Data Structure **//
+
+type VideoLabelData struct {
+	Entity         Entity
+	CategoryEntity []Entity
+	Segments       []LabelSegment
+	Frames         []LabelFrame
+}
+
+type Entity struct {
+	Id          string
+	Description string
+	Language    string
+}
+
+type LabelSegment struct {
+	Segment    Segment
+	Confidence float32
+}
+
+type Segment struct {
+	StartTimeOffset *duration.Duration
+	EndTimeOffset   *duration.Duration
+}
+
+type LabelFrame struct {
+	TimeOffset time.Time
+	Confidence float32
 }
 
 //** ERROR **//

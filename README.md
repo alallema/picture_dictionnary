@@ -68,21 +68,15 @@ In order to bring up:
 
 - create logger error - api done - service todo
 
-* Check
+* Client api vision
     - check picture size
     - check video size
     - check format picture : 
     - and video : .MOV, .MPEG4, .MP4 et .AVI
-    - encodage base64 ?
-
-* Client api vision
-    - finish implement video request
-    - see how it's for video
     - finish test implementation
 
 * Api Go
     - implement test
-    - try picture by label request
     - change implementation Api has to request from Core/lib
 
 * Object Storage
