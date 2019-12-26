@@ -8,7 +8,7 @@ import (
 )
 
 func PostPicture(picture core.Picture) error {
-	
+
 	if Client.HSet("picture:"+string(picture.Id), "id", string(picture.Id)).Val() != true {
 		// log.Printf("Failed to push PictureId:  %v", err)
 		return fmt.Errorf("Failed to push PictureId: %s", string(picture.Id))
@@ -78,14 +78,13 @@ func PostCreateLabel(data core.LabelData) error {
 	}
 	resulRequest, err := Client.SAdd("labelId", data.Id, 0).Result()
 	if err == redis.Nil {
-		// log.Printf("Failed to push labelId:  %v", err)
+		// fmt.Printf("Failed to push labelId:  %v", err)
 		return fmt.Errorf("Failed to push labelId: %s", string(data.Id))
 	} else if err != nil {
-		// log.Print(err)
+		// fmt.Print(err)
 		return err
 	}
 	fmt.Println(resulRequest)
-
 	return err
 }
 
@@ -102,7 +101,7 @@ func PostCreateObject(data core.LocalizedObjectData) error {
 		return fmt.Errorf("Failed to push objectId: %s", string(data.Id))
 	} else if err != nil {
 		// log.Print(err)
-		return err 
+		return err
 	}
 	fmt.Println(resulRequest)
 

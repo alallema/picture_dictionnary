@@ -8,7 +8,7 @@ import (
 func GetPicture(id string) core.Picture {
 	var picture core.Picture
 
-	resultRequest, err := Client.HGetAll("picture:"+id).Result()
+	resultRequest, err := Client.HGetAll("picture:" + id).Result()
 	_ = err
 	for i, pict := range resultRequest {
 		if i == "id" {
@@ -38,8 +38,8 @@ func GetPicture(id string) core.Picture {
 
 func GetLabelByPicture(id string) []string {
 	resultRequest, err := Client.ZRangeByScore("pictureIdLabel:"+id, redis.ZRangeBy{
-		Min:    "-inf",
-		Max:    "+inf",
+		Min: "-inf",
+		Max: "+inf",
 	}).Result()
 	_ = err
 	return resultRequest
@@ -47,8 +47,8 @@ func GetLabelByPicture(id string) []string {
 
 func GettLocalizedObjectByPicture(id string) []string {
 	resultRequest, err := Client.ZRangeByScore("pictureIdObject:"+id, redis.ZRangeBy{
-		Min:    "-inf",
-		Max:    "+inf",
+		Min: "-inf",
+		Max: "+inf",
 	}).Result()
 	_ = err
 	return resultRequest
