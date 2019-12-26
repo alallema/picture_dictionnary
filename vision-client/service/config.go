@@ -12,14 +12,14 @@ type ConfigVision struct {
 	Ctx      context.Context
 	Client   *vision.ImageAnnotatorClient
 	Filename string
-	W        io.Writer
 	File     io.Reader
+	GcsURI   string
 }
 
 type ConfigVideo struct {
 	Ctx      context.Context
 	Client   *video.Client
 	Filename string
-	W        io.Writer
 	File     []byte
+	GcsURI   string
 }

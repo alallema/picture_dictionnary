@@ -13,7 +13,8 @@ func DetectLabelVideo(conf config.ConfigVideo) ([]service.VideoLabelData, error)
 		Features: []videopb.Feature{
 			videopb.Feature_LABEL_DETECTION,
 		},
-		InputContent: conf.File,
+		// InputContent: conf.File,
+		InputUri: conf.GcsURI,
 	})
 	if err != nil {
 		return videoLabels, err
@@ -73,7 +74,8 @@ func ShotChange(conf config.ConfigVideo) ([]service.Segment, error) {
 		Features: []videopb.Feature{
 			videopb.Feature_SHOT_CHANGE_DETECTION,
 		},
-		InputContent: conf.File,
+		// InputContent: conf.File,
+		InputUri: conf.GcsURI,
 	})
 	if err != nil {
 		return shots, err

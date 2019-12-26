@@ -1,9 +1,11 @@
 package service
 
 import (
+	"context"
+	"log"
+
 	video "cloud.google.com/go/videointelligence/apiv1"
 	vision "cloud.google.com/go/vision/apiv1"
-	"log"
 )
 
 func (conf ConfigVision) GetVisionClient() *vision.ImageAnnotatorClient {
@@ -20,4 +22,18 @@ func (conf ConfigVideo) GetVideoClient() *video.Client {
 		log.Fatalf("Failed to create client:  %v", err)
 	}
 	return client
+}
+
+func CreateConfVideo() ConfigVideo {
+	var conf ConfigVideo
+	conf.Ctx = context.Background()
+	conf.Client = conf.GetVideoClient()
+	return conf
+}
+
+func CreateConfVision() ConfigVision {
+	var conf ConfigVision
+	conf.Ctx = context.Background()
+	conf.Client = conf.GetVisionClient()
+	return conf
 }

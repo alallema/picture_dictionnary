@@ -71,8 +71,6 @@ In order to bring up:
 * Client api vision
     - check picture size
     - check video size
-    - check format picture : 
-    - and video : .MOV, .MPEG4, .MP4 et .AVI
     - finish test implementation
 
 * Api Go
@@ -80,11 +78,13 @@ In order to bring up:
     - change implementation Api has to request from Core/lib
 
 * Object Storage
-    - check documentation
-    - choose objectstorage service
+    - implement test
+    - fix authentification for url
 
 * Web app
-    - ???
+    - convert tag
+    - fix picture display
+    - dockerize it
 
 * Create and Dockerise analyzer
     - Detection
@@ -92,5 +92,8 @@ In order to bring up:
     - Search indexation
 
 * Collector
-    - implement from directory
+    - fix implement from directory
     - implement scrapping data
+
+* Makefile
+    - to do
