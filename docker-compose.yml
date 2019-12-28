@@ -22,3 +22,10 @@ services:
     environment:
       - REDIS_HOST=redis
       - DEBUG_ENVIRONMENT=true
+  
+  app:
+    build: ./app-client/
+    depends_on:
+      - "api"
+    ports:
+      - "3000:3000"
