@@ -49,6 +49,7 @@ In order to bring up:
 - See database `CONFIG GET databases`
 - See keyspace `INFO keyspace`
 - Visit http://localhost:8080/ to check api
+- Visit http://localhost:3000/ to check the app-client
 - In order to clean up the cluster, use `docker-compose down`
 
 ## API
