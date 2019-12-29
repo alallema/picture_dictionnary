@@ -9,13 +9,12 @@ function translate(value, cb) {
     .then(cb);
 }
 
-function search(query, cb) {
+function search(query) {
   return fetch(`picture/${query}`, {
     accept: "application/json"
   }) 
     .then(checkStatus)
     .then(parseJSON)
-    .then(cb);
 }
 
 function checkStatus(response) {
