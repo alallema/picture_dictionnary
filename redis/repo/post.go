@@ -131,3 +131,27 @@ func PostPicturebyObject(picture core.Picture, data core.LocalizedObjectData) er
 	}
 	return err
 }
+
+func PostImageUrlbyLabel(picture core.Picture, data core.LabelData) error {
+	err := Client.SAdd("URLId:"+string(data.Id), picture.PictureURL, 0).Err()
+	if err == redis.Nil {
+		// log.Printf("Failed to push Picture by Label:  %v", err)
+		return fmt.Errorf("Failed to push label: %s", string(data.Id))
+	} else if err != nil {
+		// log.Print(err)
+		return err
+	}
+	return err
+}
+
+func PostImageUrlbyObject(picture core.Picture, data core.LocalizedObjectData) error {
+	err := Client.SAdd("URLId:"+string(data.Id), picture.PictureURL, 0).Err()
+	if err == redis.Nil {
+		// log.Printf("Failed to push Picture by Label:  %v", err)
+		return fmt.Errorf("Failed to push label: %s", string(data.Id))
+	} else if err != nil {
+		// log.Print(err)
+		return err
+	}
+	return err
+}

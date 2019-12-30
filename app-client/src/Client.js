@@ -35,7 +35,7 @@ function parseJSON(response) {
 function getTags(value, response) {
   var results = [];
 
-  var arr = Object.values(response)[0]
+  var arr = response.result
   for(var i=0; i<arr.length; i++) {
       if (arr[i].title.toLowerCase().search(value.toLowerCase())!==-1) {
         results.push(arr[i]);

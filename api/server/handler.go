@@ -6,10 +6,11 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 	"net/http"
+	"strings"
 )
 
 func Heartbeat(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(heartbeatResponse{Status: "OK", Code: 200})
+	json.NewEncoder(w).Encode(heartbeatResponse{Status: "Success", Code: 200})
 }
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +34,7 @@ func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 	id = "/m/" + id
 	pictureList = server.PictureByTag(id)
 	if len(*pictureList) != 0 {
-		json.NewEncoder(w).Encode(GetPictureResponse{Pictures: *pictureList})
+		json.NewEncoder(w).Encode(GetPictureResponse{Status: "Success", Total: len(*pictureList), Pictures: *pictureList})
 	} else {
 		errs = append(errs, "No picture found")
 		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
@@ -48,8 +49,8 @@ func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 	labelList = server.AllLabels()
 	objectList = server.AllObjects()
 	tagList := append(*labelList, *objectList...)
-	if len(*labelList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Tags: tagList})
+	if len(tagList) != 0 {
+		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(tagList), Tags: tagList})
 	} else {
 		errs = append(errs, "No tags found")
 		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
@@ -62,7 +63,7 @@ func (server *Server) GetAllLabels(w http.ResponseWriter, r *http.Request) {
 
 	labelList = server.AllLabels()
 	if len(*labelList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Tags: *labelList})
+		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(*labelList), Tags: *labelList})
 	} else {
 		errs = append(errs, "No labels found")
 		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
@@ -75,14 +76,45 @@ func (server *Server) GetAllObjects(w http.ResponseWriter, r *http.Request) {
 
 	objectList = server.AllObjects()
 	if len(*objectList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Tags: *objectList})
+		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(*objectList), Tags: *objectList})
 	} else {
 		errs = append(errs, "No objects found")
 		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
 	}
 }
 
-// func GetAllPictures(w http.ResponseWriter, r *http.Request) {
-// 	var pictureList *[]Picture
-// 	var errs []string
-// }
+func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r *http.Request) {
+	var resultList *[]Picture
+	var errs []string
+
+	key := r.FormValue("key")
+	log.Info().Str("key", string(key)).Msg("Result")
+	tags := strings.Split(key, ",")
+	for _, tag := range tags {
+		log.Info().Str("list", string(tag)).Msg("Pictures")
+		pictureList := server.PictureByTag("/m/" + tag)
+		resultList = filterArray(pictureList, resultList)
+	}
+	if resultList != nil && len(*resultList) != 0 {
+		json.NewEncoder(w).Encode(GetPictureResponse{Status: "Success", Total: len(*resultList), Pictures: *resultList})
+	} else {
+		errs = append(errs, "No picture found")
+		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+	}
+}
+
+func filterArray(new *[]Picture, old *[]Picture) (*[]Picture) {
+	var resultList []Picture
+
+	if old == nil || len(*old) == 0 {
+		return new
+	}
+	for _, itemNew := range *new {
+		for _, itemOld := range *old {
+			if itemNew.Id == itemOld.Id && itemNew.Id != "" {
+				resultList = append(resultList, itemNew)
+			}
+		}
+	}
+	return &resultList
+}
