@@ -8,9 +8,9 @@ import (
 
 type Picture struct {
 	Id          string    `json:"id"`
-	Title       string    `json:"Title"`
-	Format      string    `json:"Format"`
-	Source      string    `json:"Source"`
+	Title       string    `json:"title"`
+	Format      string    `json:"format"`
+	Source      string    `json:"source"`
 	PictureURL  string    `json:"mainPictureURL"`
 	PicturePath string    `json:"mainPicturePath"`
 	CreatedDate time.Time `json:"createdDate"`
@@ -18,11 +18,13 @@ type Picture struct {
 }
 
 type GetPictureResponse struct {
-	Pictures []Picture `json:"Picture"`
+	Status   string    `json:"status"`
+	Total    int       `json:"total"`
+	Pictures []Picture `json:"result"`
 }
 
 type AllPicturesResponse struct {
-	Pictures []Picture `json:"Pictures"`
+	Pictures []Picture `json:"pictures"`
 }
 
 //** Tag data **//
@@ -33,7 +35,9 @@ type Tag struct {
 }
 
 type AllTagsResponse struct {
-	Tags []Tag `json:"Pictures"`
+	Status string `json:"status"`
+	Total  int    `json:"total"`
+	Tags   []Tag  `json:"result"`
 }
 
 // Pulse Response

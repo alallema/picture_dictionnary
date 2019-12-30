@@ -67,37 +67,54 @@ func (server *Server) PictureByTag(id string) *[]Picture {
 	for _, pictureId := range resultRequest {
 		var picture Picture
 
-		pictures, err := server.Client.HGetAll("picture:"+pictureId).Result()
-		if err == redis.Nil {
-			log.Error().Err(err).Msg("Picture doesn't exist")
-		} else if err != nil {
-			log.Error().Err(err)
-		} else {
-			for i, pict := range pictures {
-				if i == "id" {
-					picture.Id = pict
-				}
-				if i == "title" {
-					picture.Title = pict
-				}
-				if i == "format" {
-					picture.Format = pict
-				}
-				if i == "picturePath" {
-					picture.PicturePath = pict
-				}
-				if i == "pictureURL" {
-					picture.PictureURL = pict
-				}
-				if i == "picturePath" {
-					picture.PicturePath = pict
-				}
-				if i == "source" {
-					picture.Source = pict
+		if pictureId != "" {
+			pictures, err := server.Client.HGetAll("picture:"+pictureId).Result()
+			if err == redis.Nil {
+				log.Error().Err(err).Msg("Picture doesn't exist")
+			} else if err != nil {
+				log.Error().Err(err)
+			} else {
+				for i, pict := range pictures {
+					if i == "id" {
+						picture.Id = pict
+					}
+					if i == "title" {
+						picture.Title = pict
+					}
+					if i == "format" {
+						picture.Format = pict
+					}
+					if i == "picturePath" {
+						picture.PicturePath = pict
+					}
+					if i == "pictureURL" {
+						picture.PictureURL = pict
+					}
+					if i == "picturePath" {
+						picture.PicturePath = pict
+					}
+					if i == "source" {
+						picture.Source = pict
+					}
 				}
 			}
+			pictureList = append(pictureList, picture)
 		}
-		pictureList = append(pictureList, picture)
 	}
 	return &pictureList
+}
+
+func (server *Server) PictureUrlByTag(tag string) *[]string {
+	var urlList []string
+
+	resultRequest, err := server.Client.SMembers("URLId"+tag).Result()
+	if err == redis.Nil {
+		log.Warn().Msg("key does not exist")
+	} else if err != nil {
+		log.Error().Err(err)
+	}
+	for _, url := range resultRequest {
+		urlList = append(urlList, url)
+	} 
+	return &urlList
 }

@@ -41,7 +41,7 @@ class App extends Component {
     }
     console.log(all_pictures)
     this.setState({
-      selectedPictures: all_pictures[0].Picture
+      selectedPictures: all_pictures[0].result
     });
   };
 

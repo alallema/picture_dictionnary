@@ -48,17 +48,11 @@ func NewRouter(server *Server) *mux.Router {
 			"/objects",
 			server.GetAllObjects,
 		},
-		// Route{
-		//     "Pictures",
-		//     "GET",
-		//     "/pictures",
-		//     Pictures.GetAllPictures,
-		// },
 		Route{
-		    "Pictures",
-		    "GET",
-		    "/picture/{tag}",
-		    server.GetPicturesByTag,
+			"Pictures Result",
+			"GET",
+			"/picture/{tag}",
+			server.GetPicturesByTag,
 		},
 	}
 
@@ -70,5 +64,11 @@ func NewRouter(server *Server) *mux.Router {
 			Name(route.Name).
 			Handler(route.HandlerFunc)
 	}
+	router.
+		Methods("GET").
+		Path("/filteredtags/").
+		Queries("key", "{[a-zA-Z0-9]*?}").
+		Name("Pictures Filtered by Multiple Tags").
+		Handler(http.HandlerFunc(server.GetPicturesFilteredByMultipleTags))
 	return router
 }

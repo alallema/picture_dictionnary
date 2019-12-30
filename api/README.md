@@ -3,7 +3,7 @@ Create simple api in go
 ## API Resources
 
 - GET /pulse — heartbeat check if our API is online
-- GET /pictures(#get-pictures) — fetch all pictures from the database (Not implement yet)
+- GET /filteredtags/?key=tag1,tag2 - fetch pictures filtered by multiple tags
 - GET /picture/[tag] — fetch pictures by tag from the database
 - GET /tags - fetch all labels and objects from database
 - GET /labels - fetch all labels from database
@@ -44,12 +44,14 @@ FIELD   1) "id"
         2) "19461154"
         3) "title"
         4) "img_657.jpg"
-        5) "path"
+        5) "picturePath"
         6) "/path/img_657.jpg"
         7) "source"
         8) "instagram:Lala"
         9) "format"
         10) "jpg"
+        11) "pictureURL"
+        12) "https://url/path/img_657.jpg"
 ```
 
 ZSET    key field value
@@ -110,6 +112,15 @@ MEMBER  1) "19461156"
         3) "19461154"
         4) "19461155"
         5) "19461156"
+```
+
+```
+KEY     URLId:/m/0bt9lr
+MEMBER  1) "https://url/path/img_657.jpg"
+        2) "https://url/path/img_658.jpg"
+        3) "https://url/path/img_659.jpg"
+        4) "https://url/path/img_660.jpg"
+        5) "https://url/path/img_661.jpg"
 ```
 
 HASH    key field value

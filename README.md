@@ -56,6 +56,7 @@ In order to bring up:
 - GET /pulse — heartbeat check if our API is online
 - GET /pictures(#get-pictures) — fetch all pictures from the database (Not implement yet)
 - GET /picture/[tag] — fetch pictures by tag from the database
+- GET /filteredtags/?key=tag1,tag2 - fetch pictures filtered by multiple tags
 - GET /tags - fetch all labels and objects from database
 - GET /labels - fetch all labels from database
 - GET /objects - fetch all objects from database
@@ -76,15 +77,14 @@ In order to bring up:
 * Api Go
     - implement test
     - change implementation Api has to request from Core/lib
+    - change tag id by name in url request
 
 * Object Storage
     - implement test
-    - fix authentification for url
+    - fix authentification for url (Chrome cors)
 
 * Web app
-    - convert tag
-    - fix picture display
-    - dockerize it
+    - use semantic component for ui ux
 
 * Create and Dockerise analyzer
     - Detection
