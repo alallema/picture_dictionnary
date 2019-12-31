@@ -1,91 +1,63 @@
-import React from "react";
+import React, { Component } from 'react'
 import Client from "./Client";
+import _ from 'lodash';
+import { Grid, Search } from 'semantic-ui-react';
 
-const MATCHING_ITEM_LIMIT = 25;
+const initialState = { isLoading: false, results: [], value: '' }
 
-class TagSearch extends React.Component {
-  state = {
-    tags: [],
-    showRemoveIcon: false,
-    searchValue: ""
-  };
+export default class TagSearch extends Component {
+  state = initialState
 
-  handleSearchChange = e => {
-    const value = e.target.value;
-
+  handleSearchChange = (e, { value }) => {
     this.setState({
-      searchValue: value
-    });
+        isLoading: true, value
+    })
 
-    if (value === "") {
-      this.setState({
-        tags: [],
-        showRemoveIcon: false
-      });
-    } else {
-      this.setState({
-        showRemoveIcon: true
-      });
+    setTimeout(async () => {
+    if (this.state.value.length < 1) return this.setState(initialState)
 
-      Client.translate(value, tags => {
-        this.setState({
-          tags: tags.slice(0, MATCHING_ITEM_LIMIT)
-        });
-      });
-    }
-  };
+    const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
+    const isMatch = (result) => re.test(result.title)
 
-  handleSearchCancel = () => {
+    var results = await Client.translate(value)
     this.setState({
-      tags: [],
-      showRemoveIcon: false,
-      searchValue: ""
-    });
-  };
+        isLoading: false,
+        results: _.filter(results.result, isMatch),
+      })
+    }, 30)
+  }
 
   render() {
-    const { showRemoveIcon, tags } = this.state;
-    const removeIconStyle = showRemoveIcon ? {} : { visibility: "hidden" };
-
-    const tagRows = tags.map((tag, idx) => (
-      <tr key={idx} onClick={() => this.props.onTagClick(tag)}>
-        <td>{tag.title}</td>
-      </tr>
-    ));
+    const { isLoading, value, results } = this.state
 
     return (
-      <div id="tag-search">
-        <table className="ui selectable structured large table">
-          <thead>
-            <tr>
-              <th colSpan="5">
-                <div className="ui fluid search">
-                  <div className="ui icon input">
-                    <input
-                      className="prompt"
-                      type="text"
-                      placeholder="Search tags..."
-                      value={this.state.searchValue}
-                      onChange={this.handleSearchChange}
-                    />
-                    <i className="search icon" />
-                  </div>
-                  <i
-                    className="remove icon"
-                    onClick={this.handleSearchCancel}
-                    style={removeIconStyle}
-                  />
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {tagRows}
-          </tbody>
-        </table>
-      </div>
-    );
+      <Grid>
+        <Grid.Column width={6}>
+          <Search
+            loading={isLoading}
+            onResultSelect={(e, {result}) => {
+              this.props.onTagClick(result)
+            }}
+            onSearchChange={_.debounce(this.handleSearchChange, 300, {
+              leading: true,
+            })}
+            results={results}
+            value={value}
+          />
+        </Grid.Column>
+        {/* <Grid.Column width={10}>
+          <Segment>
+            <Header>State</Header>
+            <pre style={{ overflowX: 'auto' }}>
+              {JSON.stringify(this.state, null, 2)}
+            </pre>
+            <Header>Options</Header>
+            <pre style={{ overflowX: 'auto' }}>
+              {JSON.stringify(this.results, null, 2)}
+            </pre>
+          </Segment>
+        </Grid.Column> */}
+      </Grid>
+    )
   }
 }
-
-export default TagSearch;

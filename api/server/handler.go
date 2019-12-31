@@ -44,11 +44,25 @@ func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 	var labelList *[]Tag
 	var objectList *[]Tag
+	var tagList []Tag
 	var errs []string
+	var alreadyExist bool
 
 	labelList = server.AllLabels()
 	objectList = server.AllObjects()
-	tagList := append(*labelList, *objectList...)
+	// tagList := append(*labelList, *objectList...)
+	tagList = append(tagList, *labelList...)
+	for _, object := range *objectList {
+		alreadyExist = false
+		for _, label := range *labelList {
+			if label.Id == object.Id {
+				alreadyExist = true
+			}
+		}
+		if alreadyExist == false {
+			tagList = append(tagList, object)
+		}
+	}
 	if len(tagList) != 0 {
 		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(tagList), Tags: tagList})
 	} else {
@@ -103,7 +117,7 @@ func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r
 	}
 }
 
-func filterArray(new *[]Picture, old *[]Picture) (*[]Picture) {
+func filterArray(new *[]Picture, old *[]Picture) *[]Picture {
 	var resultList []Picture
 
 	if old == nil || len(*old) == 0 {
