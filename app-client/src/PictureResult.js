@@ -1,12 +1,16 @@
 import React from "react";
 import { Grid, Image } from 'semantic-ui-react'
 
-export default function PictureResult(props) {
-  const { pictures } = props;
 
-  console.log("PICTURE ROWS", pictures)
+
+export default function PictureResult(props) {
+  let { pictures } = props;
+
+  if (typeof pictures === "undefined"){
+    pictures = []
+  }
   const pictureRows = pictures.map((picture, idx) => (
-    <Grid.Column>
+    <Grid.Column key={picture.id}>
         <Image
           src={picture.mainPictureURL}
         />

@@ -3,8 +3,7 @@ import SelectedTags from "./SelectedTags";
 import TagSearch from "./TagSearch";
 import PictureResult from "./PictureResult"
 import Client from "./Client";
-import { Button } from 'semantic-ui-react';
-
+import { Container, Button, Divider } from 'semantic-ui-react';
 
 class App extends Component {
   state = {
@@ -34,14 +33,14 @@ class App extends Component {
   };
 
   showPictures =  async picture => {
-    let all_pictures = []
-    for(var i=0; i<this.state.selectedTags.length; i++){
-      console.log(this.state.selectedTags[i].id.substring(3))
-      all_pictures.push(await Client.search(this.state.selectedTags[i].id.substring(3)));
-    }
-    console.log(all_pictures)
     this.setState({
-      selectedPictures: all_pictures[0].result
+      selectedPictures: []
+    });
+    var result = Array.from(this.state.selectedTags, x => x.id.substring(3))
+    let all_pictures = []
+    all_pictures = await Client.search(result.join(','))
+    this.setState({
+      selectedPictures: all_pictures.result
     });
   };
 
@@ -49,21 +48,24 @@ class App extends Component {
     const { selectedTags, selectedPictures } = this.state;
 
     return (
-      <div className="App">
-        <div className="ui text container">
+      <Container style={{ marginTop: '3em' }}>
+        <div className="App">
           <SelectedTags
             tags={selectedTags}
             onTagClick={this.removeTagItem}
           />
+          <Divider />
           <TagSearch onTagClick={this.addTag} />
+          <Divider />
           <Button onClick={this.showPictures}>
               Result
           </Button>
-        </div>
+          <Divider />
           <PictureResult
             pictures={selectedPictures}
           />
-      </div>
+        </div>
+      </Container>
     );
   }
 }

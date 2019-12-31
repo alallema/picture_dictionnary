@@ -1,27 +1,35 @@
 import React from "react";
+import { Icon, Label } from 'semantic-ui-react';
+
+const colors = [
+  'red',
+  'orange',
+  'yellow',
+  'olive',
+  'green',
+  'teal',
+  'blue',
+  'violet',
+  'purple',
+  'pink',
+  'brown',
+  'grey',
+  'black',
+]
 
 export default function SelectedTags(props) {
   const { tags } = props;
 
   const tagRows = tags.map((tag, idx) => (
-    <tr key={idx} onClick={() => props.onTagClick(idx)}>
-      <td>{tag.description}</td>
-      <td className="right aligned">{tag.title}</td>
-    </tr>
+      <Label key={idx} style={{ marginBottom: '1em' }} onClick={() => props.onTagClick(idx)}>
+        {tag.title}
+        <Icon name='close' />
+      </Label>
   ));
 
   return (
-    <table className="ui selectable structured large table">
-      <thead>
-        <tr>
-          <th colSpan="5">
-            <h3>Selected tags</h3>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+      <div>
         {tagRows}
-      </tbody>
-    </table>
+      </div>
   );
 }
