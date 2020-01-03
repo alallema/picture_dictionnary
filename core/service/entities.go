@@ -62,10 +62,10 @@ type Picture struct {
 //** Vision for Video Data Structure **//
 
 type VideoLabelData struct {
-	Entity         Entity
-	CategoryEntity []Entity
-	Segments       []LabelSegment
-	Frames         []LabelFrame
+	Entity           Entity
+	CategoryEntities []Entity
+	Segments         []LabelSegment
+	Frames           []LabelFrame
 }
 
 type Entity struct {

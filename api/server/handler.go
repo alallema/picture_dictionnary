@@ -31,8 +31,8 @@ func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	id := vars["tag"]
-	id = "/m/" + id
-	pictureList = server.PictureByTag(id)
+	tag := "/" + id[:1] + "/" + id[1:]
+	pictureList = server.PictureByTag(tag)
 	if len(*pictureList) != 0 {
 		json.NewEncoder(w).Encode(GetPictureResponse{Status: "Success", Total: len(*pictureList), Pictures: *pictureList})
 	} else {
@@ -102,11 +102,10 @@ func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r
 	var errs []string
 
 	key := r.FormValue("key")
-	log.Info().Str("key", string(key)).Msg("Result")
 	tags := strings.Split(key, ",")
 	for _, tag := range tags {
-		log.Info().Str("list", string(tag)).Msg("Pictures")
-		pictureList := server.PictureByTag("/m/" + tag)
+
+		pictureList := server.PictureByTag("/" + tag[:1] + "/" + tag[1:])
 		resultList = filterArray(pictureList, resultList)
 	}
 	if resultList != nil && len(*resultList) != 0 {

@@ -40,6 +40,7 @@ This is for now the only service to be independent
 ### Instructions to launch Redis and Api
 
 In order to bring up:
+- Declare env var `export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"`
 - Use `docker-compose build` to build api
 - Use `docker-compose up` to see the logs of all the containers
 - Use `docker-compose up -d` if you want it to run in the foreground
@@ -71,6 +72,7 @@ In order to bring up:
 - create logger error - api done - service todo
 
 * Client api vision
+    - implement core video and test result on app 
     - check picture size
     - check video size
     - finish test implementation
@@ -79,6 +81,7 @@ In order to bring up:
     - implement test
     - change implementation Api has to request from Core/lib
     - change tag id by name in url request
+    - swagger
 
 * Object Storage
     - implement test

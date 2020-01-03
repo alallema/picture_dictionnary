@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/rs/zerolog/log"
 )
@@ -15,9 +16,11 @@ func (server *Server) AllLabels() *[]Tag {
 		log.Error().Err(err)
 	}
 	for _, labelId := range resultRequest {
-		label := server.Client.HGet("labelDescr:"+labelId, "en")
+		keys := server.Client.HKeys("labelDescr:" + labelId)
+		label := server.Client.HGet("labelDescr:"+labelId, keys.Val()[0])
 		if label.Err() == redis.Nil {
-			log.Error().Err(err).Msg("Label Id has no description")
+			msg := fmt.Sprintf("Label Id has no description %s", labelId)
+			log.Error().Err(err).Msg(msg)
 		} else {
 			tag := Tag{
 				Id:    labelId,
@@ -56,7 +59,7 @@ func (server *Server) AllObjects() *[]Tag {
 func (server *Server) PictureByTag(id string) *[]Picture {
 	var pictureList []Picture
 
-	resultRequest, err := server.Client.SMembers("Id:"+string(id)).Result()
+	resultRequest, err := server.Client.SMembers("Id:" + string(id)).Result()
 	if err == redis.Nil {
 		log.Warn().Msg("key does not exist")
 	} else if err != nil {
@@ -68,7 +71,7 @@ func (server *Server) PictureByTag(id string) *[]Picture {
 		var picture Picture
 
 		if pictureId != "" {
-			pictures, err := server.Client.HGetAll("picture:"+pictureId).Result()
+			pictures, err := server.Client.HGetAll("picture:" + pictureId).Result()
 			if err == redis.Nil {
 				log.Error().Err(err).Msg("Picture doesn't exist")
 			} else if err != nil {
@@ -107,7 +110,7 @@ func (server *Server) PictureByTag(id string) *[]Picture {
 func (server *Server) PictureUrlByTag(tag string) *[]string {
 	var urlList []string
 
-	resultRequest, err := server.Client.SMembers("URLId"+tag).Result()
+	resultRequest, err := server.Client.SMembers("URLId" + tag).Result()
 	if err == redis.Nil {
 		log.Warn().Msg("key does not exist")
 	} else if err != nil {
@@ -115,6 +118,6 @@ func (server *Server) PictureUrlByTag(tag string) *[]string {
 	}
 	for _, url := range resultRequest {
 		urlList = append(urlList, url)
-	} 
+	}
 	return &urlList
 }

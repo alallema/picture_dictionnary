@@ -36,7 +36,7 @@ class App extends Component {
     this.setState({
       selectedPictures: []
     });
-    var result = Array.from(this.state.selectedTags, x => x.id.substring(3))
+    var result = Array.from(this.state.selectedTags, x => x.id.replace(/\//g, ''))
     let all_pictures = []
     all_pictures = await Client.search(result.join(','))
     this.setState({

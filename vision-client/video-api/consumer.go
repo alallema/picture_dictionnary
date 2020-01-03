@@ -40,7 +40,7 @@ func DetectLabelVideo(conf config.ConfigVideo) ([]service.VideoLabelData, error)
 					Description: category.Description,
 					Language:    category.LanguageCode,
 				}
-				videoLabel.CategoryEntity = append(videoLabel.CategoryEntity, categoryEntity)
+				videoLabel.CategoryEntities = append(videoLabel.CategoryEntities, categoryEntity)
 			}
 			for _, segment := range label.Segments {
 				Segment := service.Segment{
