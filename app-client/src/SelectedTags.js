@@ -1,21 +1,21 @@
 import React from "react";
 import { Icon, Label } from 'semantic-ui-react';
 
-const colors = [
-  'red',
-  'orange',
-  'yellow',
-  'olive',
-  'green',
-  'teal',
-  'blue',
-  'violet',
-  'purple',
-  'pink',
-  'brown',
-  'grey',
-  'black',
-]
+// const colors = [
+//   'red',
+//   'orange',
+//   'yellow',
+//   'olive',
+//   'green',
+//   'teal',
+//   'blue',
+//   'violet',
+//   'purple',
+//   'pink',
+//   'brown',
+//   'grey',
+//   'black',
+// ]
 
 export default function SelectedTags(props) {
   const { tags } = props;

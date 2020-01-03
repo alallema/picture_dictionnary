@@ -36,7 +36,6 @@ Don't need it if you launch it with docker
 ## Redis Structure
 
 HASH    key field value
-- Picture data
 
 ```
 KEY     picture:"98asdjw2"
@@ -54,6 +53,38 @@ FIELD   1) "id"
         12) "https://url/path/img_657.jpg"
 ```
 
+```
+KEY     labelDescr:/m/0bt9lr
+FIELD   1) "en"
+        2) "song"
+        3) "fr"
+        4) "chanson"
+        5) "de"
+        6) "song"
+        7) "es"
+        8) "canción"
+```
+
+```
+KEY     objectDescr:/m/0bt9lr
+FIELD   1) "en"
+        2) "dog"
+        3) "fr"
+        4) "chien"
+        5) "de"
+        6) "hund"
+        7) "es"
+        8) "perro"
+```
+
+```
+KEY     categoryDescr:/m/0bt9lr
+FIELD   1) "en"
+        2) "hair"
+        3) "fr"
+        4) "cheveux"
+```
+
 ZSET    key field value
 - key is PictureId Field is mid zscore
 
@@ -66,9 +97,6 @@ FIELD   1) "/m/0bt9lr"
         5) "/m/09686"
 ```
 
-ZSET    key field value
-- key is PictureId Field is mid zscore
-
 ```
 KEY     pictureIdObject:19461332
 FIELD   1) "/m/0bt9lr"
@@ -78,8 +106,15 @@ FIELD   1) "/m/0bt9lr"
         5) "/m/09686"
 ```
 
+```
+KEY     seg:19461156:/m/0bt9lr
+MEMBER  1) "2.416666s-3.25s"
+        2) "875ms-2.375s"
+        3) "2.416666s-3.25s"
+```
+
 SET     key member [member ...]
- - key is mid return all mid
+ - key is id return all id
 
 ```
 KEY     labelId
@@ -90,9 +125,6 @@ MEMBER  1) "/m/0bt9lr"
         5) "/m/09686"
 ```
 
-SET     key member [member ...]
- - key is mid return all mid
-
 ```
 KEY     objectId
 MEMBER  1) "/m/0bt9lr"
@@ -102,11 +134,44 @@ MEMBER  1) "/m/0bt9lr"
         5) "/m/09686"
 ```
 
-SET     key member [member ...]
- - key is mid, value is image id
+```
+KEY     categoryId
+MEMBER  1) "/m/0bt9lr"
+        2) "/m/01pm38"
+        3) "/m/04rky"
+        4) "/m/02wbgd"
+        5) "/m/09686"
+```
+
+```
+KEY     pictureIdCategory:19461332
+MEMBER  1) "/m/0bt9lr"
+        2) "/m/01pm38"
+        3) "/m/04rky"
+        4) "/m/02wbgd"
+        5) "/m/09686"
+```
+
+```
+KEY     categoryId:/m/012yh1
+MEMBER  1) "/m/0bt9lr"
+        2) "/m/01pm38"
+        3) "/m/04rky"
+        4) "/m/02wbgd"
+        5) "/m/09686"
+```
 
 ```
 KEY     Id:/m/0bt9lr
+MEMBER  1) "19461156"
+        2) "19461153"
+        3) "19461154"
+        4) "19461155"
+        5) "19461156"
+```
+
+```
+KEY     VidId:/m/0bt9lr
 MEMBER  1) "19461156"
         2) "19461153"
         3) "19461154"
@@ -121,30 +186,4 @@ MEMBER  1) "https://url/path/img_657.jpg"
         3) "https://url/path/img_659.jpg"
         4) "https://url/path/img_660.jpg"
         5) "https://url/path/img_661.jpg"
-```
-
-HASH    key field value
-
-```
-KEY     labelDescr:/m/0bt9lr
-FIELD   1) "en"
-        2) "dog"
-        3) "fr"
-        4) "chien"
-        5) "de"
-        6) "hund"
-        7) "es"
-        8) "perro"
-```
-
-```
-KEY     objectDescr:/m/0bt9lr
-FIELD   1) "en"
-        2) "dog"
-        3) "fr"
-        4) "chien"
-        5) "de"
-        6) "hund"
-        7) "es"
-        8) "perro"
 ```

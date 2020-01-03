@@ -5,8 +5,6 @@ function translate(value) {
   })
     .then(checkStatus)
     .then(parseJSON)
-    // .then(function(data) { return getTags(value, data); })
-    // .then(cb)
 }
 
 function search(query) {
