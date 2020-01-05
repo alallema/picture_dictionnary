@@ -14,14 +14,17 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/joho/godotenv v1.3.0 // indirect
+	github.com/mdempsky/gocode v0.0.0-20191202075140-939b4a677f2f
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
 	github.com/rs/zerolog v1.17.2
+	github.com/sqs/goreturns v0.0.0-20181028201513-538ac6014518
 	go.opencensus.io v0.22.2 // indirect
 	go.uber.org/zap v1.13.0 // indirect
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6 // indirect
 	golang.org/x/sys v0.0.0-20191210023423-ac6580df4449 // indirect
+	golang.org/x/tools v0.0.0-20191115202509-3a792d9c32b2
 	google.golang.org/api v0.14.0
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20191206224255-0243a4be9c8f

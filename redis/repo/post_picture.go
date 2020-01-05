@@ -58,7 +58,6 @@ func PostLocalizedObjectByPicture(picture core.Picture, data core.LocalizedObjec
 }
 
 func PostCreateLabel(data core.LabelData) {
-
 	if Client.HExists("labelDescr:"+data.Id, data.Language).Val() == false {
 		if Client.HSet("labelDescr:"+data.Id, data.Language, data.Description).Val() != true {
 			fmt.Printf("Failed to push labelDescr: %s", data.Id)

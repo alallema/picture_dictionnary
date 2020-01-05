@@ -29,7 +29,7 @@ func CheckFormat(name string) int {
 		if formatName == "JPEG" || formatName == "JPG" || formatName == "PNG" || formatName == "PNG8" || formatName == "PNG24" || formatName == "GIF" || formatName == "BMP" || formatName == "WEBP" || formatName == "RAW" || formatName == "ICO" || formatName == "PDF" || formatName == "TIFF" {
 			return 1
 		}
-		if formatName == "MOV" || formatName == "MPEG4" || formatName == "MP4" || formatName == "AVI" {
+		if formatName == "MOV" || formatName == "MPEG" || formatName == "MPEG4" || formatName == "MP4" || formatName == "AVI" {
 			return 2
 		}
 	}
