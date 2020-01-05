@@ -78,14 +78,9 @@ In order to bring up:
     - finish test implementation
 
 * Api Go
-    - implement test
     - change implementation Api has to request from Core/lib
     - change tag id by name in url request
     - swagger
-
-* Object Storage
-    - implement test
-    - fix authentification for url (Chrome cors)
 
 * Web app
     - use semantic component for ui ux
@@ -98,6 +93,9 @@ In order to bring up:
 * Collector
     - fix implement from directory
     - implement scrapping data
+    - add config file
+    - implement test
+    - fix authentification for url (Chrome cors)
 
 * Makefile
     - to do

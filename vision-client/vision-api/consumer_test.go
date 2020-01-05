@@ -1,36 +1,20 @@
 package vision_api
 
 import (
-	"context"
-	"fmt"
+	core "github.com/alallema/picture_dictionnary.git/core/service"
+	"github.com/alallema/picture_dictionnary.git/vision-client/service"
 	"reflect"
 	"testing"
-
-	"github.com/alallema/picture_dictionnary.git/core/service"
-	config "github.com/alallema/picture_dictionnary.git/vision-client/service"
 )
 
-func TestGetClient(t *testing.T) {
-
-	var conf config.ConfigVision
-	conf.Ctx = context.Background()
-	conf.Client = conf.GetVisionClient()
-
-	if conf.Client != nil {
-		fmt.Printf("client\n")
-	} else {
-		fmt.Printf("no client\n")
-	}
-}
-
-func TestDetectLabels(t *testing.T) {
+func TestDetectLabelsFromFile(t *testing.T) {
 	type args struct {
-		conf config.ConfigVision
+		conf service.ConfigVision
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    []service.LabelData
+		want    []core.LabelData
 		wantErr bool
 	}{
 		// TODO: Add test cases.
@@ -39,37 +23,89 @@ func TestDetectLabels(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := DetectLabelsFromFile(tt.args.conf)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DetectLabels() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DetectLabelsFromFile() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("DetectLabels() got = %v, want %v", got, tt.want)
+				t.Errorf("DetectLabelsFromFile() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestLocalizeObjects(t *testing.T) {
+func TestDetectLabelsFromUri(t *testing.T) {
 	type args struct {
-		conf config.ConfigVision
+		conf service.ConfigVision
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    []service.LocalizedObjectData
+		want    []core.LabelData
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := LocalizeObjects(tt.args.conf)
+			got, err := DetectLabelsFromUri(tt.args.conf)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LocalizeObjects() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DetectLabelsFromUri() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("LocalizeObjects() got = %v, want %v", got, tt.want)
+				t.Errorf("DetectLabelsFromUri() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLocalizeObjectsFromFile(t *testing.T) {
+	type args struct {
+		conf service.ConfigVision
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []core.LocalizedObjectData
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LocalizeObjectsFromFile(tt.args.conf)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LocalizeObjectsFromFile() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LocalizeObjectsFromFile() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLocalizeObjectsFromUri(t *testing.T) {
+	type args struct {
+		conf service.ConfigVision
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []core.LocalizedObjectData
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := LocalizeObjectsFromUri(tt.args.conf)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LocalizeObjectsFromUri() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("LocalizeObjectsFromUri() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

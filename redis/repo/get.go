@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"fmt"
 	core "github.com/alallema/picture_dictionnary.git/core/service"
 	"github.com/go-redis/redis"
 )
@@ -55,9 +56,13 @@ func GettLocalizedObjectByPicture(id string) []string {
 }
 
 func GetLabelDescription(id string) string {
-	resultRequest, err := Client.HGet("labelDescr:"+id, "en").Result()
-	_ = err
-	return resultRequest
+	keys := Client.HKeys("labelDescr:" + id)
+	if len(keys.Val()) > 0 {
+		resultRequest, err := Client.HGet("labelDescr:"+id, keys.Val()[0]).Result()
+		_ = err
+		return resultRequest
+	}
+	return "Not found"
 }
 
 func GetObjectDescription(id string) string {
@@ -66,14 +71,22 @@ func GetObjectDescription(id string) string {
 	return resultRequest
 }
 
-func GetAllLabels() []string {
-	resultRequest, err := Client.SMembers("labelId").Result()
-	_ = err
+func GetPictureByLabel(id string) []string {
+	resultRequest, err := Client.SMembers("Id:"+id).Result()
+	if err == redis.Nil {
+		fmt.Println("key does not exist")
+	} else if err != nil {
+		fmt.Println(err)
+	}
 	return resultRequest
 }
 
-func GetAllObjects() []string {
-	resultRequest, err := Client.SMembers("objectId").Result()
-	_ = err
+func GetPictureUrlByLabel(id string) []string {
+	resultRequest, err := Client.SMembers("URLId:"+id).Result()
+	if err == redis.Nil {
+		fmt.Println("key does not exist")
+	} else if err != nil {
+		fmt.Println(err)
+	}
 	return resultRequest
 }

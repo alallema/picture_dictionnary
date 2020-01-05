@@ -1,33 +1,33 @@
 package video_api
 
 import (
+	core "github.com/alallema/picture_dictionnary.git/core/service"
+	"github.com/alallema/picture_dictionnary.git/vision-client/service"
 	"reflect"
 	"testing"
-
-	"github.com/alallema/picture_dictionnary.git/core/service"
-	config "github.com/alallema/picture_dictionnary.git/vision-client/service"
 )
 
 func TestDetectLabelVideo(t *testing.T) {
 	type args struct {
-		conf config.ConfigVideo
+		conf service.ConfigVideo
 	}
 	tests := []struct {
-		name  string
-		args  args
-		want  []service.VideoLabelData
-		want1 error
+		name    string
+		args    args
+		want    []core.VideoLabelData
+		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := DetectLabelVideo(tt.args.conf)
+			got, err := DetectLabelVideo(tt.args.conf)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DetectLabelVideo() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("DetectLabelVideo() got = %v, want %v", got, tt.want)
-			}
-			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("DetectLabelVideo() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}
@@ -35,24 +35,25 @@ func TestDetectLabelVideo(t *testing.T) {
 
 func TestShotChange(t *testing.T) {
 	type args struct {
-		conf config.ConfigVideo
+		conf service.ConfigVideo
 	}
 	tests := []struct {
-		name  string
-		args  args
-		want  []service.Segment
-		want1 error
+		name    string
+		args    args
+		want    []core.Segment
+		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := ShotChange(tt.args.conf)
+			got, err := ShotChange(tt.args.conf)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ShotChange() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ShotChange() got = %v, want %v", got, tt.want)
-			}
-			if !reflect.DeepEqual(got1, tt.want1) {
-				t.Errorf("ShotChange() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}
