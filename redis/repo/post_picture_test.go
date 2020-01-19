@@ -2,21 +2,32 @@ package repo
 
 import (
 	core "github.com/alallema/picture_dictionnary.git/core/service"
+	"github.com/google/go-cmp/cmp"
 	"testing"
 )
 
 func TestPostPicture(t *testing.T) {
 	type args struct {
 		picture core.Picture
+		id      string
 	}
 	tests := []struct {
 		name string
 		args args
+		want core.Picture
 	}{
+		{
+			name: "No picture",
+			args: args{
+				picture: core.Picture{},
+				id:      "noexist",
+			},
+			want: core.Picture{},
+		},
 		{
 			name: "simple picture",
 			args: args{
-				core.Picture{
+				picture: core.Picture{
 					Id:          "1111111",
 					Title:       "img_001.jpg",
 					Format:      "jpg",
@@ -24,12 +35,25 @@ func TestPostPicture(t *testing.T) {
 					PicturePath: "/path/img_001.jpg",
 					PictureURL:  "https://path/img_001.jpg",
 				},
+				id: "1111111",
+			},
+			want: core.Picture{
+				Id:          "1111111",
+				Title:       "img_001.jpg",
+				Format:      "jpg",
+				Source:      "instagram:Lala",
+				PicturePath: "/path/img_001.jpg",
+				PictureURL:  "https://path/img_001.jpg",
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			PostPicture(tt.args.picture)
+			got := GetPicture(tt.args.id)
+			if got != tt.want {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -38,11 +62,24 @@ func TestPostLabelByPicture(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LabelData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
+		{
+			name: "Empty",
+			args: args{
+				picture: core.Picture{},
+				data:    core.LabelData{},
+				id:      "noexist",
+			},
+			want:    []string{},
+			wantErr: nil,
+		},
 		{
 			name: "First picture",
 			args: args{
@@ -62,7 +99,12 @@ func TestPostLabelByPicture(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"label1",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Same picture",
@@ -83,7 +125,13 @@ func TestPostLabelByPicture(t *testing.T) {
 					Confidence:  0.77,
 					Topicality:  0.77,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"label1",
+				"label2",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Same same picture",
@@ -104,12 +152,27 @@ func TestPostLabelByPicture(t *testing.T) {
 					Confidence:  0.44,
 					Topicality:  0.44,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"label3",
+				"label1",
+				"label2",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostLabelByPicture(tt.args.picture, tt.args.data)
+			err := PostLabelByPicture(tt.args.picture, tt.args.data)
+			got := GetLabelByPicture(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -118,11 +181,24 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LocalizedObjectData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
+		{
+			name: "Empty",
+			args: args{
+				picture: core.Picture{},
+				data:    core.LocalizedObjectData{},
+				id:      "noexist",
+			},
+			want:    []string{},
+			wantErr: nil,
+		},
 		{
 			name: "First picture",
 			args: args{
@@ -140,7 +216,12 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"object1",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Same picture",
@@ -159,7 +240,13 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 					Name:     "second test object",
 					Score:    0.77,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"object1",
+				"object2",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Same same picture",
@@ -178,12 +265,27 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 					Name:     "third test object",
 					Score:    0.44,
 				},
+				id: "1111111",
 			},
+			want: []string{
+				"object3",
+				"object1",
+				"object2",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostLocalizedObjectByPicture(tt.args.picture, tt.args.data)
+			err := PostLocalizedObjectByPicture(tt.args.picture, tt.args.data)
+			got := GettLocalizedObjectByPicture(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -191,11 +293,23 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 func TestPostCreateLabel(t *testing.T) {
 	type args struct {
 		data core.LabelData
+		id   string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    string
+		wantErr error
 	}{
+		{
+			name: "Don't exist",
+			args: args{
+				data: core.LabelData{},
+				id:   "none",
+			},
+			want:    "Not found",
+			wantErr: nil,
+		},
 		{
 			name: "label 1",
 			args: args{
@@ -207,7 +321,10 @@ func TestPostCreateLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want:    "first test label",
+			wantErr: nil,
 		},
 		{
 			name: "label 2",
@@ -220,7 +337,10 @@ func TestPostCreateLabel(t *testing.T) {
 					Confidence:  0.77,
 					Topicality:  0.77,
 				},
+				id: "label2",
 			},
+			want:    "second test label",
+			wantErr: nil,
 		},
 		{
 			name: "label 3",
@@ -233,12 +353,23 @@ func TestPostCreateLabel(t *testing.T) {
 					Confidence:  0.44,
 					Topicality:  0.44,
 				},
+				id: "label3",
 			},
+			want:    "third test label",
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostCreateLabel(tt.args.data)
+			err := PostCreateLabel(tt.args.data)
+			got := GetLabelDescription(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -246,11 +377,23 @@ func TestPostCreateLabel(t *testing.T) {
 func TestPostCreateObject(t *testing.T) {
 	type args struct {
 		data core.LocalizedObjectData
+		id   string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    string
+		wantErr error
 	}{
+		{
+			name: "Empty",
+			args: args{
+				data: core.LocalizedObjectData{},
+				id:   "noexist",
+			},
+			want:    "",
+			wantErr: nil,
+		},
 		{
 			name: "object 1",
 			args: args{
@@ -260,7 +403,10 @@ func TestPostCreateObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want:    "first test object",
+			wantErr: nil,
 		},
 		{
 			name: "object 2",
@@ -271,7 +417,10 @@ func TestPostCreateObject(t *testing.T) {
 					Name:     "second test object",
 					Score:    0.77,
 				},
+				id: "object2",
 			},
+			want:    "second test object",
+			wantErr: nil,
 		},
 		{
 			name: "object 3",
@@ -283,11 +432,20 @@ func TestPostCreateObject(t *testing.T) {
 					Score:    0.44,
 				},
 			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostCreateObject(tt.args.data)
+			err := PostCreateObject(tt.args.data)
+			got := GetObjectDescription(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -296,11 +454,24 @@ func TestPostPicturebyLabel(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LabelData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
+		{
+			name: "Empty",
+			args: args{
+				picture: core.Picture{},
+				data:    core.LabelData{},
+				id:      "noexist",
+			},
+			want:    []string{},
+			wantErr: nil,
+		},
 		{
 			name: "First picture",
 			args: args{
@@ -320,7 +491,12 @@ func TestPostPicturebyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"1111111",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Second picture",
@@ -341,7 +517,13 @@ func TestPostPicturebyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"1111111",
+				"2222222",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Third picture",
@@ -362,12 +544,27 @@ func TestPostPicturebyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"1111111",
+				"2222222",
+				"3333333",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostPicturebyLabel(tt.args.picture, tt.args.data)
+			err := PostPicturebyLabel(tt.args.picture, tt.args.data)
+			got := GetPictureByLabel(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -376,11 +573,24 @@ func TestPostPicturebyObject(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LocalizedObjectData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
+		{
+			name: "Empty",
+			args: args{
+				picture: core.Picture{},
+				data:    core.LocalizedObjectData{},
+				id:      "noexist",
+			},
+			want:    []string{},
+			wantErr: nil,
+		},
 		{
 			name: "First picture",
 			args: args{
@@ -398,7 +608,12 @@ func TestPostPicturebyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"1111111",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Second picture",
@@ -417,7 +632,13 @@ func TestPostPicturebyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"1111111",
+				"2222222",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Third picture",
@@ -436,12 +657,27 @@ func TestPostPicturebyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"1111111",
+				"2222222",
+				"3333333",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostPicturebyObject(tt.args.picture, tt.args.data)
+			err := PostPicturebyObject(tt.args.picture, tt.args.data)
+			got := GetPictureByLabel(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -450,10 +686,13 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LabelData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
 		{
 			name: "First picture",
@@ -474,7 +713,12 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Second picture",
@@ -495,7 +739,13 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"https://path/img_002.jpg",
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Third picture",
@@ -516,12 +766,27 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 					Confidence:  0.55,
 					Topicality:  0.55,
 				},
+				id: "label1",
 			},
+			want: []string{
+				"https://path/img_002.jpg",
+				"https://path/img_003.jpg",
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostImageUrlbyLabel(tt.args.picture, tt.args.data)
+			err := PostImageUrlbyLabel(tt.args.picture, tt.args.data)
+			got := GetPictureUrlByLabel(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }
@@ -530,10 +795,13 @@ func TestPostImageUrlbyObject(t *testing.T) {
 	type args struct {
 		picture core.Picture
 		data    core.LocalizedObjectData
+		id      string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		want    []string
+		wantErr error
 	}{
 		{
 			name: "First picture",
@@ -552,7 +820,12 @@ func TestPostImageUrlbyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Second picture",
@@ -571,7 +844,13 @@ func TestPostImageUrlbyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"https://path/img_002.jpg",
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 		{
 			name: "Third picture",
@@ -590,12 +869,27 @@ func TestPostImageUrlbyObject(t *testing.T) {
 					Name:     "first test object",
 					Score:    0.55,
 				},
+				id: "object1",
 			},
+			want: []string{
+				"https://path/img_002.jpg",
+				"https://path/img_003.jpg",
+				"https://path/img_001.jpg",
+			},
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			PostImageUrlbyObject(tt.args.picture, tt.args.data)
+			err := PostImageUrlbyObject(tt.args.picture, tt.args.data)
+			got := GetPictureUrlByLabel(tt.args.id)
+			if err != tt.wantErr {
+				t.Errorf("error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("result = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

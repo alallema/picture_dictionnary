@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/go-redis/redis"
 )
@@ -17,5 +17,11 @@ func init() {
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
-	fmt.Println("redis init done")
+	log.Printf("redis init done")
+
+	pong, err := Client.Ping().Result()
+	log.Println(pong, err)
+	if err != nil {
+		log.Printf("can't connect")
+	}
 }

@@ -73,7 +73,7 @@ In order to bring up:
 
 * Client api vision
     - implement core video and test result on app 
-    - check picture size
+    - check picture size 20 Mo
     - check video size
     - finish test implementation
 
@@ -99,3 +99,12 @@ In order to bring up:
 
 * Makefile
     - to do
+
+* Deploiement
+    - 
+
+* Croller
+    - vimeo
+
+* Drag and Drop
+    - ?

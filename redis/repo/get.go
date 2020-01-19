@@ -72,7 +72,7 @@ func GetObjectDescription(id string) string {
 }
 
 func GetPictureByLabel(id string) []string {
-	resultRequest, err := Client.SMembers("Id:"+id).Result()
+	resultRequest, err := Client.SMembers("Id:" + id).Result()
 	if err == redis.Nil {
 		fmt.Println("key does not exist")
 	} else if err != nil {
@@ -82,7 +82,7 @@ func GetPictureByLabel(id string) []string {
 }
 
 func GetPictureUrlByLabel(id string) []string {
-	resultRequest, err := Client.SMembers("URLId:"+id).Result()
+	resultRequest, err := Client.SMembers("URLId:" + id).Result()
 	if err == redis.Nil {
 		fmt.Println("key does not exist")
 	} else if err != nil {

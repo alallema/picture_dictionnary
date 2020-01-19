@@ -1,7 +1,6 @@
 package vision_api
 
 import (
-	"fmt"
 	"log"
 
 	vision "cloud.google.com/go/vision/apiv1"
@@ -14,15 +13,16 @@ func DetectLabelsFromFile(conf config.ConfigVision) ([]service.LabelData, error)
 
 	image, err := vision.NewImageFromReader(conf.File)
 	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
+		log.Printf("Failed to read file: %v on file: %s", err, conf.Filename)
 		return labels, err
 	}
 	annotations, err := conf.Client.DetectLabels(conf.Ctx, image, nil, 10)
 	if err != nil {
+		log.Printf("Failed to detect label: %v on file: %s", err, conf.Filename)
 		return labels, err
 	}
 	if len(annotations) == 0 {
-		fmt.Println("No annotations found.")
+		log.Printf("No annotations found.")
 	} else {
 		for _, annotation := range annotations {
 			label := service.LabelData{
@@ -47,10 +47,11 @@ func DetectLabelsFromUri(conf config.ConfigVision) ([]service.LabelData, error) 
 	image := vision.NewImageFromURI(conf.GcsURI)
 	annotations, err := conf.Client.DetectLabels(conf.Ctx, image, nil, 10)
 	if err != nil {
+		log.Printf("Failed to detect label: %v on file: %s", err, conf.GcsURI)
 		return labels, err
 	}
 	if len(annotations) == 0 {
-		fmt.Println("No annotations found.")
+		log.Printf("No annotations found.")
 	} else {
 		for _, annotation := range annotations {
 			label := service.LabelData{
@@ -72,15 +73,17 @@ func LocalizeObjectsFromFile(conf config.ConfigVision) ([]service.LocalizedObjec
 
 	image, err := vision.NewImageFromReader(conf.File)
 	if err != nil {
+		log.Printf("Failed to read file: %v on file: %s", err, conf.Filename)
 		return objects, err
 	}
 	annotations, err := conf.Client.LocalizeObjects(conf.Ctx, image, nil)
 	if err != nil {
+		log.Printf("Failed to detect label: %v on file: %s", err, conf.Filename)
 		return objects, err
 	}
 
 	if len(annotations) == 0 {
-		fmt.Println("No objects found.")
+		log.Printf("No objects found.")
 		return objects, err
 	}
 
@@ -112,11 +115,12 @@ func LocalizeObjectsFromUri(conf config.ConfigVision) ([]service.LocalizedObject
 	image := vision.NewImageFromURI(conf.GcsURI)
 	annotations, err := conf.Client.LocalizeObjects(conf.Ctx, image, nil)
 	if err != nil {
+		log.Printf("Failed to detect label: %v on file: %s", err, conf.GcsURI)
 		return objects, err
 	}
 
 	if len(annotations) == 0 {
-		fmt.Println("No objects found.")
+		log.Printf("No objects found.")
 		return objects, err
 	}
 
