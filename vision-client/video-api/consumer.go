@@ -4,6 +4,7 @@ import (
 	"github.com/alallema/picture_dictionnary.git/core/service"
 	config "github.com/alallema/picture_dictionnary.git/vision-client/service"
 	videopb "google.golang.org/genproto/googleapis/cloud/videointelligence/v1"
+	"log"
 )
 
 func DetectLabelVideo(conf config.ConfigVideo) ([]service.VideoLabelData, error) {
@@ -17,10 +18,12 @@ func DetectLabelVideo(conf config.ConfigVideo) ([]service.VideoLabelData, error)
 		InputUri: conf.GcsURI,
 	})
 	if err != nil {
+		log.Printf("Failed to start annotation job: %v on: %s", err, conf.GcsURI)
 		return videoLabels, err
 	}
 	resp, err := op.Wait(conf.Ctx)
 	if err != nil {
+		log.Printf("Failed to annotate: %v on: %s", err, conf.GcsURI)
 		return videoLabels, err
 	}
 
@@ -78,10 +81,12 @@ func ShotChange(conf config.ConfigVideo) ([]service.Segment, error) {
 		InputUri: conf.GcsURI,
 	})
 	if err != nil {
+		log.Printf("Failed to start annotation job: %v on: %s", err, conf.GcsURI)
 		return shots, err
 	}
 	resp, err := op.Wait(conf.Ctx)
 	if err != nil {
+		log.Printf("Failed to annotate: %v on: %s", err, conf.GcsURI)
 		return shots, err
 	}
 

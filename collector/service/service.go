@@ -35,11 +35,10 @@ func CreateConfStorage() ConfigStorage {
 // Path prototype :
 // collector/directory_source/title.format
 
-func CreatePictureData(file string) core.Picture {
+func CreatePictureData(file string) (core.Picture, error) {
 	var picture core.Picture
 
 	picData := strings.Split(file, "/")
-	fmt.Println(picData)
 	lenData := len(picData)
 	if lenData >= 3 {
 		pic := strings.Split(picData[lenData-1], ".")
@@ -52,8 +51,11 @@ func CreatePictureData(file string) core.Picture {
 		picture.PictureURL = "https://storage.cloud.google.com/picture-dictionnary-bucket/" + file
 		picture.CreatedDate = time.Now()
 		picture.Id = guuid.New().String()
+	} else {
+		log.Printf("Not good formating picture path")
+		return picture, fmt.Errorf("Not good formating picture path")
 	}
-	return picture
+	return picture, nil
 }
 
 // func ExtractPictureFromDirectory(dir string) []core.Picture {
@@ -71,16 +73,15 @@ func CreatePictureData(file string) core.Picture {
 func GetDirectory(dirPath string) []os.FileInfo {
 	files, err := ioutil.ReadDir(dirPath)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
-
 	return files
 }
 
 func GetFile(file string) io.Reader {
 	f, err := os.Open(file)
 	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
+		log.Printf("Failed to read file: %v", err)
 	}
 	// defer f.Close()
 	return f
@@ -89,7 +90,7 @@ func GetFile(file string) io.Reader {
 func ReadFile(file string) []byte {
 	f, err := ioutil.ReadFile(file)
 	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
+		log.Printf("Failed to read file: %v", err)
 	}
 	// defer f.Close()
 	return f
