@@ -5,5 +5,5 @@ type config struct {
 	RedisHost   string `env:"REDIS_HOST" envDefault:"localhost"`
 	RedisPort   string `env:"REDIS_PORT" envDefault:"6379"`
 	RedisPasswd string `env:"REDIS_PASSWORD" envDefault:""`
-	ApiPort     string `env:"API_PORT" envDefault:"8080"`
+	ApiPort     string `env:"API_PORT" envDefault:"4000"`
 }

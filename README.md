@@ -49,7 +49,7 @@ In order to bring up:
 - Launch redis-shell `docker exec -it redis redis-cli`
 - See database `CONFIG GET databases`
 - See keyspace `INFO keyspace`
-- Visit http://localhost:8080/ to check api
+- Visit http://localhost:4000/ to check api
 - Visit http://localhost:3000/ to check the app-client
 - In order to clean up the cluster, use `docker-compose down`
 
@@ -81,9 +81,7 @@ In order to bring up:
     - change implementation Api has to request from Core/lib
     - change tag id by name in url request
     - swagger
-
-* Web app
-    - use semantic component for ui ux
+    - review error status code
 
 * Create and Dockerise analyzer
     - Detection
@@ -95,16 +93,12 @@ In order to bring up:
     - implement scrapping data
     - add config file
     - implement test
-    - fix authentification for url (Chrome cors)
 
-* Makefile
-    - to do
+* Web App
+    - fix authentification for url (Chrome cors)
 
 * Deploiement
     - 
-
-* Croller
-    - vimeo
 
 * Drag and Drop
     - ?
