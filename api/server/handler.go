@@ -10,12 +10,12 @@ import (
 )
 
 func Heartbeat(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(heartbeatResponse{Status: "Success", Code: 200})
+	json.NewEncoder(w).Encode(Response{Status: "Success", Code: 200})
 }
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
 	log.Debug().Msg("Launching Home ...")
-	fmt.Fprint(w, "Welcome\n- GET /pulse — heartbeat check if our API is online\n- GET /pictures — fetch all pictures from the database\n- GET /picture/[tag] — fetch pictures by tag from the database\n- GET /tags — fetch all tag available from the database\n")
+	fmt.Fprint(w, "Welcome\n- GET /pulse — heartbeat check if our API is online\n- GET /filteredtags/?key=tag1,tag2 - fetch pictures filtered by multiple tags\n- GET /picture/[tag] — fetch pictures by tag from the database\n- GET /tags - fetch all labels and objects from database\n- GET /labels - fetch all labels from database\n- GET /objects - fetch all objects from database\n")
 	//Reset the Content-Type Header back to text
 	// w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// dat, err := ioutil.ReadFile("./web/api.html")
@@ -27,17 +27,15 @@ func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 	var pictureList *[]Picture
-	var errs []string
 
 	vars := mux.Vars(r)
 	id := vars["tag"]
 	tag := "/" + id[:1] + "/" + id[1:]
 	pictureList = server.PictureByTag(tag)
 	if len(*pictureList) != 0 {
-		json.NewEncoder(w).Encode(GetPictureResponse{Status: "Success", Total: len(*pictureList), Pictures: *pictureList})
+		json.NewEncoder(w).Encode(GetPictureResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*pictureList), Pictures: *pictureList})
 	} else {
-		errs = append(errs, "No picture found")
-		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+		json.NewEncoder(w).Encode(Response{Status: "No picture found", Code: 204})
 	}
 }
 
@@ -45,7 +43,6 @@ func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 	var labelList *[]Tag
 	var objectList *[]Tag
 	var tagList []Tag
-	var errs []string
 	var alreadyExist bool
 
 	labelList = server.AllLabels()
@@ -64,42 +61,36 @@ func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if len(tagList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(tagList), Tags: tagList})
+		json.NewEncoder(w).Encode(AllTagsResponse{Response: Response{Status: "Success", Code: 200}, Total: len(tagList), Tags: tagList})
 	} else {
-		errs = append(errs, "No tags found")
-		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+		json.NewEncoder(w).Encode(Response{Status: "No tags found", Code: 204})
 	}
 }
 
 func (server *Server) GetAllLabels(w http.ResponseWriter, r *http.Request) {
 	var labelList *[]Tag
-	var errs []string
 
 	labelList = server.AllLabels()
 	if len(*labelList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(*labelList), Tags: *labelList})
+		json.NewEncoder(w).Encode(AllTagsResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*labelList), Tags: *labelList})
 	} else {
-		errs = append(errs, "No labels found")
-		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+		json.NewEncoder(w).Encode(Response{Status: "No labels found", Code: 204})
 	}
 }
 
 func (server *Server) GetAllObjects(w http.ResponseWriter, r *http.Request) {
 	var objectList *[]Tag
-	var errs []string
 
 	objectList = server.AllObjects()
 	if len(*objectList) != 0 {
-		json.NewEncoder(w).Encode(AllTagsResponse{Status: "Success", Total: len(*objectList), Tags: *objectList})
+		json.NewEncoder(w).Encode(AllTagsResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*objectList), Tags: *objectList})
 	} else {
-		errs = append(errs, "No objects found")
-		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+		json.NewEncoder(w).Encode(Response{Status: "No objects found", Code: 204})
 	}
 }
 
 func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r *http.Request) {
 	var resultList *[]Picture
-	var errs []string
 
 	key := r.FormValue("key")
 	tags := strings.Split(key, ",")
@@ -109,10 +100,9 @@ func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r
 		resultList = filterArray(pictureList, resultList)
 	}
 	if resultList != nil && len(*resultList) != 0 {
-		json.NewEncoder(w).Encode(GetPictureResponse{Status: "Success", Total: len(*resultList), Pictures: *resultList})
+		json.NewEncoder(w).Encode(GetPictureResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*resultList), Pictures: *resultList})
 	} else {
-		errs = append(errs, "No picture found")
-		json.NewEncoder(w).Encode(ErrorResponse{Errors: errs})
+		json.NewEncoder(w).Encode(Response{Status: "No picture found", Code: 204})
 	}
 }
 
