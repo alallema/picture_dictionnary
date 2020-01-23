@@ -15,7 +15,7 @@ func Heartbeat(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
 	log.Debug().Msg("Launching Home ...")
-	fmt.Fprint(w, "Welcome\n- GET /pulse — heartbeat check if our API is online\n- GET /pictures — fetch all pictures from the database\n- GET /picture/[tag] — fetch pictures by tag from the database\n- GET /tags — fetch all tag available from the database\n")
+	fmt.Fprint(w, "Welcome\n- GET /pulse — heartbeat check if our API is online\n- GET /filteredtags/?key=tag1,tag2 - fetch pictures filtered by multiple tags\n- GET /picture/[tag] — fetch pictures by tag from the database\n- GET /tags - fetch all labels and objects from database\n- GET /labels - fetch all labels from database\n- GET /objects - fetch all objects from database\n")
 	//Reset the Content-Type Header back to text
 	// w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	// dat, err := ioutil.ReadFile("./web/api.html")
