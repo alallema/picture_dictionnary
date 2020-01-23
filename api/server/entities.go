@@ -4,6 +4,11 @@ import (
 	"time"
 )
 
+type Response struct {
+	Status   string    `json:"status"`
+	Code	 int		`json:"code"`
+}
+
 //** Picture data **//
 
 type Picture struct {
@@ -18,7 +23,8 @@ type Picture struct {
 }
 
 type GetPictureResponse struct {
-	Status   string    `json:"status"`
+	// Status   string    `json:"status"`
+	Response Response  `json:"response"`
 	Total    int       `json:"total"`
 	Pictures []Picture `json:"result"`
 }
@@ -30,25 +36,13 @@ type AllPicturesResponse struct {
 //** Tag data **//
 
 type Tag struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
+	Id    string	`json:"id"`
+	Title string	`json:"title"`
 }
 
 type AllTagsResponse struct {
-	Status string `json:"status"`
-	Total  int    `json:"total"`
-	Tags   []Tag  `json:"result"`
-}
-
-// Pulse Response
-
-type heartbeatResponse struct {
-	Status string `json:"status"`
-	Code   int    `json:"code"`
-}
-
-//** ERROR **//
-
-type ErrorResponse struct {
-	Errors []string `json:"errors"`
+	// Status string `json:"status"`
+	Response	Response	`json:"response"`
+	Total		int  		`json:"total"`
+	Tags		[]Tag		`json:"result"`
 }
