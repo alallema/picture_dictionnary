@@ -5,8 +5,8 @@ import (
 )
 
 type Response struct {
-	Status   string    `json:"status"`
-	Code	 int		`json:"code"`
+	Status   string		`json:"statusText"`
+	Code	 int		`json:"status"`
 }
 
 //** Picture data **//
@@ -38,6 +38,7 @@ type AllPicturesResponse struct {
 type Tag struct {
 	Id    string	`json:"id"`
 	Title string	`json:"title"`
+	Type  string	`json:"type"`
 }
 
 type AllTagsResponse struct {

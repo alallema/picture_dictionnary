@@ -54,6 +54,18 @@ func NewRouter(server *Server) *mux.Router {
 			"/picture/{tag}",
 			server.GetPicturesByTag,
 		},
+		Route{
+			"Video Result",
+			"GET",
+			"/video/{tag}",
+			server.GetVideosByTag,
+		},
+		Route{
+			"Categories Result",
+			"GET",
+			"/categories",
+			server.GetAllCategories,
+		},
 	}
 
 	router := mux.NewRouter().StrictSlash(true)
