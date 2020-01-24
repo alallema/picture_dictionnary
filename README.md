@@ -95,6 +95,7 @@ In order to bring up:
 
 * Web App
     - fix authentification for url (Chrome cors)
+    - create config in file and env
 
 * Deploiement
     - 
