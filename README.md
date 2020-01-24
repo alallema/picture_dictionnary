@@ -72,7 +72,7 @@ In order to bring up:
 - create logger error - api done - service todo
 
 * Client api vision
-    - implement core video and test result on app 
+    - fix implementation video double result
     - check picture size 20 Mo
     - check video size
     - finish test implementation
@@ -81,7 +81,6 @@ In order to bring up:
     - change implementation Api has to request from Core/lib
     - change tag id by name in url request
     - swagger
-    - review error status code
 
 * Create and Dockerise analyzer
     - Detection

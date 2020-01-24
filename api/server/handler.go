@@ -39,15 +39,31 @@ func (server *Server) GetPicturesByTag(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (server *Server) GetVideosByTag(w http.ResponseWriter, r *http.Request) {
+	var pictureList *[]Picture
+
+	vars := mux.Vars(r)
+	id := vars["tag"]
+	tag := "/" + id[:1] + "/" + id[1:]
+	pictureList = server.VideoByTag(tag)
+	if len(*pictureList) != 0 {
+		json.NewEncoder(w).Encode(GetPictureResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*pictureList), Pictures: *pictureList})
+	} else {
+		json.NewEncoder(w).Encode(Response{Status: "No video found", Code: 204})
+	}
+}
+
 func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 	var labelList *[]Tag
 	var objectList *[]Tag
+	// var catList *[]Tag
 	var tagList []Tag
+	var tmpList []Tag
 	var alreadyExist bool
 
 	labelList = server.AllLabels()
 	objectList = server.AllObjects()
-	// tagList := append(*labelList, *objectList...)
+	// catList = server.AllCategories()
 	tagList = append(tagList, *labelList...)
 	for _, object := range *objectList {
 		alreadyExist = false
@@ -57,13 +73,38 @@ func (server *Server) GetAllTags(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if alreadyExist == false {
-			tagList = append(tagList, object)
+			tmpList = append(tmpList, object)
 		}
 	}
+	tagList = append(*labelList, tmpList...)
+	// tmpList = nil
+	// for _, cat := range *catList {
+	// 	alreadyExist = false
+	// 	for _, tag := range tagList {
+	// 		if tag.Id == cat.Id {
+	// 			alreadyExist = true
+	// 		}
+	// 	}
+	// 	if alreadyExist == false {
+	// 		tmpList = append(tmpList, cat)
+	// 	}
+	// }
+	// tagList = append(tagList, tmpList...)
 	if len(tagList) != 0 {
 		json.NewEncoder(w).Encode(AllTagsResponse{Response: Response{Status: "Success", Code: 200}, Total: len(tagList), Tags: tagList})
 	} else {
 		json.NewEncoder(w).Encode(Response{Status: "No tags found", Code: 204})
+	}
+}
+
+func (server *Server) GetAllCategories(w http.ResponseWriter, r *http.Request) {
+	var catList *[]Tag
+
+	catList = server.AllCategories()
+	if len(*catList) != 0 {
+		json.NewEncoder(w).Encode(AllTagsResponse{Response: Response{Status: "Success", Code: 200}, Total: len(*catList), Tags: *catList})
+	} else {
+		json.NewEncoder(w).Encode(Response{Status: "No labels found", Code: 204})
 	}
 }
 
@@ -97,6 +138,11 @@ func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r
 	for _, tag := range tags {
 
 		pictureList := server.PictureByTag("/" + tag[:1] + "/" + tag[1:])
+		videoList := server.VideoByTag("/" + tag[:1] + "/" + tag[1:])
+		for _, video := range *videoList{
+			log.Info().Str("picture", string(video.Title)).Msg("Video List")
+		}
+		*pictureList = append(*pictureList, *videoList...)
 		resultList = filterArray(pictureList, resultList)
 	}
 	if resultList != nil && len(*resultList) != 0 {

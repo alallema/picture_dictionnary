@@ -25,6 +25,7 @@ func (server *Server) AllLabels() *[]Tag {
 			tag := Tag{
 				Id:    labelId,
 				Title: label.Val(),
+				Type:  "label",
 			}
 			labelList = append(labelList, tag)
 		}
@@ -49,11 +50,37 @@ func (server *Server) AllObjects() *[]Tag {
 			tag := Tag{
 				Id:    objectId,
 				Title: object.Val(),
+				Type:  "category",
 			}
 			objectList = append(objectList, tag)
 		}
 	}
 	return &objectList
+}
+
+func (server *Server) AllCategories() *[]Tag {
+	var catList []Tag
+
+	resultRequest, err := server.Client.SMembers("categoryId").Result()
+	if err == redis.Nil {
+		log.Warn().Msg("key does not exist")
+	} else if err != nil {
+		log.Error().Err(err)
+	}
+	for _, catId := range resultRequest {
+		cat := server.Client.HGet("categoryDescr:"+catId, "en-US")
+		if cat.Err() == redis.Nil {
+			log.Error().Err(err).Msg("cat Id has no description")
+		} else {
+			tag := Tag{
+				Id:    catId,
+				Title: cat.Val(),
+				Type:  "object",
+			}
+			catList = append(catList, tag)
+		}
+	}
+	return &catList
 }
 
 func (server *Server) PictureByTag(id string) *[]Picture {
@@ -105,6 +132,57 @@ func (server *Server) PictureByTag(id string) *[]Picture {
 		}
 	}
 	return &pictureList
+}
+
+func (server *Server) VideoByTag(id string) *[]Picture {
+	var videoList []Picture
+
+	resultRequest, err := server.Client.SMembers("VidId:" + string(id)).Result()
+	if err == redis.Nil {
+		log.Warn().Msg("key does not exist")
+	} else if err != nil {
+		log.Error().Err(err)
+	} else if len(resultRequest) == 0 {
+		log.Info().Str("video", string(id)).Msg("No result this video")
+	}
+	for _, videoId := range resultRequest {
+		var video Picture
+
+		if videoId != "" {
+			videos, err := server.Client.HGetAll("video:" + videoId).Result()
+			if err == redis.Nil {
+				log.Error().Err(err).Msg("Picture doesn't exist")
+			} else if err != nil {
+				log.Error().Err(err)
+			} else {
+				for i, pict := range videos {
+					if i == "id" {
+						video.Id = pict
+					}
+					if i == "title" {
+						video.Title = pict
+					}
+					if i == "format" {
+						video.Format = pict
+					}
+					if i == "videoPath" {
+						video.PicturePath = pict
+					}
+					if i == "videoURL" {
+						video.PictureURL = pict
+					}
+					if i == "videoPath" {
+						video.PicturePath = pict
+					}
+					if i == "source" {
+						video.Source = pict
+					}
+				}
+			}
+			videoList = append(videoList, video)
+		}
+	}
+	return &videoList
 }
 
 func (server *Server) PictureUrlByTag(tag string) *[]string {

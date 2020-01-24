@@ -3,11 +3,13 @@ Create simple api in go
 ## API Resources
 
 - GET /pulse — heartbeat check if our API is online
-- GET /filteredtags/?key=tag1,tag2 - fetch pictures filtered by multiple tags
+- GET /filteredtags/?key=tag1,tag2 - fetch pictures and video filtered by multiple tags
 - GET /picture/[tag] — fetch pictures by tag from the database
+- GET /video/[tag] — fetch pictures by tag from the database
 - GET /tags - fetch all labels and objects from database
 - GET /labels - fetch all labels from database
 - GET /objects - fetch all objects from database
+- GET /categories - fetch all categories from database
 
 ## Setup
 
