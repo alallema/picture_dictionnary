@@ -3,6 +3,9 @@ const cheerio = require('cheerio');
 const puppeteer = require("puppeteer");
 const fs = require('fs');
 const vidl = require('vimeo-downloader');
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage();
+const myBucket = storage.bucket('picture-dictionnary-to-process/');
 
 const url = 'https://vimeo.com/user98620336/following';
 
@@ -21,7 +24,7 @@ let users = await axios(url)
     return pageNumber
   })
   .then(async value => {
-    console.log('page: ', value);
+    console.log('Number of pages to be scrapped: ', value);
     let data = [];
     for (i = 1; i < 2; i++) {
       urlPage = 'https://vimeo.com/user98620336/following' + '/page:' + i + '/sort:date';
@@ -83,11 +86,28 @@ getUsers().then(async users => {
             }
         }
     }
+    console.log('Get all videos list: ', videoList);
     return (videoList);
 })
 .then(value => {
+    
     for (i = 0; i < value.length; i++) {
+        let file = myBucket.file('video' + value[i].videoId + 'user' + value[i].userId + '.mp4');
+
         vidl('https://vimeo.com' + value[i].videoId, { quality: '360p' })
-            .pipe(fs.createWriteStream('video' + value[i].videoId + 'user' + value[i].userId + '.mp4'));
+            .pipe(file.createWriteStream({
+                metadata: {
+                  contentType: 'video/mp4',
+                  metadata: {
+                    source: 'vimeo'
+                  }
+                }
+            }))
+            .on('error', function(err) {})
+            .on('finish', function() {
+                console.log('upload', file.name);
+              // The file upload is complete.
+            });
     }
 })
+ 

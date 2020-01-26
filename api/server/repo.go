@@ -92,7 +92,7 @@ func (server *Server) PictureByTag(id string) *[]Picture {
 	} else if err != nil {
 		log.Error().Err(err)
 	} else if len(resultRequest) == 0 {
-		log.Info().Str("picture", string(id)).Msg("No result this picture")
+		log.Info().Str("picture", string(id)).Msg("No picture result for this tag")
 	}
 	for _, pictureId := range resultRequest {
 		var picture Picture
@@ -143,7 +143,7 @@ func (server *Server) VideoByTag(id string) *[]Picture {
 	} else if err != nil {
 		log.Error().Err(err)
 	} else if len(resultRequest) == 0 {
-		log.Info().Str("video", string(id)).Msg("No result this video")
+		log.Info().Str("video", string(id)).Msg("No video result for this tag")
 	}
 	for _, videoId := range resultRequest {
 		var video Picture

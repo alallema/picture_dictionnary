@@ -72,7 +72,6 @@ In order to bring up:
 - create logger error - api done - service todo
 
 * Client api vision
-    - fix implementation video double result
     - check picture size 20 Mo
     - check video size
     - finish test implementation
