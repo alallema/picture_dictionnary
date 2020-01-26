@@ -139,9 +139,6 @@ func (server *Server) GetPicturesFilteredByMultipleTags(w http.ResponseWriter, r
 
 		pictureList := server.PictureByTag("/" + tag[:1] + "/" + tag[1:])
 		videoList := server.VideoByTag("/" + tag[:1] + "/" + tag[1:])
-		for _, video := range *videoList{
-			log.Info().Str("picture", string(video.Title)).Msg("Video List")
-		}
 		*pictureList = append(*pictureList, *videoList...)
 		resultList = filterArray(pictureList, resultList)
 	}
