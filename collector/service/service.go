@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -27,7 +25,7 @@ func CreateConfStorage() ConfigStorage {
 	var conf ConfigStorage
 	conf.Ctx = context.Background()
 	conf.Client = conf.GetStorageClient()
-	conf.BucketName = "picture-dictionnary-bucket"
+	conf.BucketName = os.Getenv("BUCKETNAMETOPROCESS")
 	conf.It = conf.Client.Bucket(conf.BucketName).Objects(conf.Ctx, nil)
 	return conf
 }
@@ -47,8 +45,8 @@ func CreatePictureData(file string) (core.Picture, error) {
 		if len(pic) == 2 {
 			picture.Format = pic[1]
 		}
-		picture.PicturePath = "gs://picture-dictionnary-bucket/" + file
-		picture.PictureURL = "https://storage.cloud.google.com/picture-dictionnary-bucket/" + file
+		picture.PicturePath = "gs://" + os.Getenv("BUCKETNAME") + "/" + file
+		picture.PictureURL = "https://storage.cloud.google.com/" + os.Getenv("BUCKETNAME") + "/" + file
 		picture.CreatedDate = time.Now()
 		picture.Id = guuid.New().String()
 	} else {
@@ -58,40 +56,29 @@ func CreatePictureData(file string) (core.Picture, error) {
 	return picture, nil
 }
 
-// func ExtractPictureFromDirectory(dir string) []core.Picture {
-// 	var pictureFile []core.Picture
+func CopyToBucket(client *storage.Client, dstBucket, srcBucket, srcObject string) error {
+	ctx := context.Background()
 
-// 	files := GetDirectory(dir)
-// 	for _, filename := range files {
-// 		picture := CreatePictureData(filename.Name())
-// 		pictureFile = append(pictureFile, picture)
-// 	}
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+	dstObject := srcObject
+	src := client.Bucket(srcBucket).Object(srcObject)
+	dst := client.Bucket(dstBucket).Object(dstObject)
 
-// 	return pictureFile
-// }
-
-func GetDirectory(dirPath string) []os.FileInfo {
-	files, err := ioutil.ReadDir(dirPath)
-	if err != nil {
-		log.Println(err)
+	if _, err := dst.CopierFrom(src).Run(ctx); err != nil {
+		return err
 	}
-	return files
+	return nil
 }
 
-func GetFile(file string) io.Reader {
-	f, err := os.Open(file)
-	if err != nil {
-		log.Printf("Failed to read file: %v", err)
-	}
-	// defer f.Close()
-	return f
-}
+func Delete(client *storage.Client, bucket, object string) error {
+	ctx := context.Background()
 
-func ReadFile(file string) []byte {
-	f, err := ioutil.ReadFile(file)
-	if err != nil {
-		log.Printf("Failed to read file: %v", err)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+	o := client.Bucket(bucket).Object(object)
+	if err := o.Delete(ctx); err != nil {
+		return err
 	}
-	// defer f.Close()
-	return f
+	return nil
 }

@@ -1,13 +1,13 @@
 # Picture_dictionnary
 
-This project is search engine of picture and video for mood board
+This project is a search engine of picture and video for a mood board
 The goal is to labelise pictures from choosen source download and reference them to be able to retrieve interesting data by word or mood
 
 ## Architecture
 
 ### Code Architecture
 
-This projects try to create module that can be changed easily for another solution
+This project try to create a module that may  be changed easily for another solution
 It's means that every modules has to use or translate his data by core(lib) data structure
 At the end the goal is that every module could run like micro services
 For each module:
@@ -27,6 +27,10 @@ This is for now the only service to be independent
 
 * In **core**, there is useful structs or constant useful and shared between subproject
 
+* In **app-client** we have an dev client for search with a basic simple UI
+
+* In **collector** we have an dev client who goint to request all files from cloud-storage
+
 * In **scraper**, not implement yet but has to scrap picture and video from differents sources. So they will be surely multiple scraper
 
 **Docker** Have to be remade for now it's just launch redis datastore and api
@@ -37,7 +41,7 @@ This is for now the only service to be independent
 
 ## Getting Started
 
-### Instructions to launch Redis and Api
+### Instructions to launch Redis, Api and App
 
 In order to bring up:
 - Declare env var `export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"`
@@ -52,6 +56,12 @@ In order to bring up:
 - Visit http://localhost:4000/ to check api
 - Visit http://localhost:3000/ to check the app-client
 - In order to clean up the cluster, use `docker-compose down`
+
+### Instructions to Launch Core and Collector
+
+ - Setup env variable like `export BUCKETNAME="picture-dictionnary-bucket"`
+ - Setup env variable like `export BUCKETNAMETOPROCESS="picture-dictionnary-to-process"`
+ - Launch it `go run core/cmd/main.go`
 
 ## API
 
@@ -87,14 +97,13 @@ In order to bring up:
     - Search indexation
 
 * Collector
-    - fix implement from directory
-    - implement scrapping data
-    - add config file
     - implement test
 
 * Web App
     - fix authentification for url (Chrome cors)
     - create config in file and env
+    - implement visualization video
+    - fix without result
 
 * Deploiement
     - 
