@@ -104,9 +104,9 @@ In order to bring up:
     - create config in file and env
     - implement visualization video
     - fix without result
+    - drag and drop
 
 * Deploiement
-    - 
-
-* Drag and Drop
-    - ?
+    - docker core/cmd
+    - docker scraper
+    - launch makefile in CI

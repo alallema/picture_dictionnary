@@ -1,10 +1,11 @@
 package vision_api
 
 import (
-	core "github.com/alallema/picture_dictionnary.git/core/service"
-	"github.com/alallema/picture_dictionnary.git/vision-client/service"
 	"reflect"
 	"testing"
+
+	core "github.com/alallema/picture_dictionnary.git/core/service"
+	"github.com/alallema/picture_dictionnary.git/vision-client/service"
 )
 
 func TestDetectLabelsFromFile(t *testing.T) {
