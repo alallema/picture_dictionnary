@@ -10,6 +10,7 @@ require (
 	github.com/antchfx/xmlquery v1.2.3 // indirect
 	github.com/antchfx/xpath v1.1.4 // indirect
 	github.com/caarlos0/env v3.5.0+incompatible // indirect
+	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gocolly/colly v1.2.0
@@ -28,6 +29,7 @@ require (
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/sqs/goreturns v0.0.0-20181028201513-538ac6014518
 	github.com/temoto/robotstxt v1.1.1 // indirect
+	github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
 	go.opencensus.io v0.22.2 // indirect
 	go.uber.org/zap v1.13.0 // indirect
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553 // indirect

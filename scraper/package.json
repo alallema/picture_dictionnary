@@ -12,7 +12,8 @@
     "@google-cloud/storage": "^4.3.0",
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^2.1.0",
+    "redis": "^2.8.0",
     "vimeo-downloader": "^1.0.4"
   }
 }

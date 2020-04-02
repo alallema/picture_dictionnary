@@ -1,11 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const puppeteer = require("puppeteer");
-const fs = require('fs');
-const vidl = require('vimeo-downloader');
-const {Storage} = require('@google-cloud/storage');
-const storage = new Storage();
-const myBucket = storage.bucket('picture-dictionnary-to-process/');
+const pushList = require('./redis-cli.js');
 
 const url = 'https://vimeo.com/user98620336/following';
 
@@ -26,7 +22,7 @@ let users = await axios(url)
   .then(async value => {
     console.log('Number of pages to be scrapped: ', value);
     let data = [];
-    for (i = 1; i < 2; i++) {
+    for (i = 1; i < value; i++) {
       urlPage = 'https://vimeo.com/user98620336/following' + '/page:' + i + '/sort:date';
       let idList = [];
       await axios(urlPage)
@@ -72,7 +68,7 @@ const getVideoId = async (url) => {
 getUsers().then(async users => {
     let videoList = [];
     for (i = 0; i < users.length; i++) {
-        for (j = 0; j < users[i].length; j++){
+        for (j = 0; j < users[i].length; j++) {
             let videoId = await getVideoId('https://vimeo.com/user' + users[i][j].substring(5))
             .then(value => {
                 return value;
@@ -90,24 +86,5 @@ getUsers().then(async users => {
     return (videoList);
 })
 .then(value => {
-    
-    for (i = 0; i < value.length; i++) {
-        let file = myBucket.file('video' + value[i].videoId + 'user' + value[i].userId + '.mp4');
-
-        vidl('https://vimeo.com' + value[i].videoId, { quality: '360p' })
-            .pipe(file.createWriteStream({
-                metadata: {
-                  contentType: 'video/mp4',
-                  metadata: {
-                    source: 'vimeo'
-                  }
-                }
-            }))
-            .on('error', function(err) {})
-            .on('finish', function() {
-                console.log('upload', file.name);
-              // The file upload is complete.
-            });
-    }
-})
- 
+    pushList(value)
+});
