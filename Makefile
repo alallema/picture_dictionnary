@@ -1,7 +1,7 @@
 # # Go parameters
 PROJECT_NAME = "github.com/alallema/picture_dictionnary.git"
 PKG = "$(PROJECT_NAME)"
-PKGS = collector core redis
+PKGS = collector core redis vision-client
 LIST := $(foreach pkg,$(PKGS),$(PROJECT_NAME)/$(pkg)/...)
 PKG_LIST := $(shell env GO111MODULE=on go list $(LIST) )
 

@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"io"
-	"reflect"
 	"testing"
 
 	video "cloud.google.com/go/videointelligence/apiv1"
@@ -23,7 +22,17 @@ func TestConfigVideo_GetVideoClient(t *testing.T) {
 		fields fields
 		want   *video.Client
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Test no client",
+			fields: fields{
+				Ctx:      context.Background(),
+				Client:   nil,
+				Filename: "",
+				File:     []byte{},
+				GcsURI:   "",
+			},
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -34,7 +43,7 @@ func TestConfigVideo_GetVideoClient(t *testing.T) {
 				File:     tt.fields.File,
 				GcsURI:   tt.fields.GcsURI,
 			}
-			if got := conf.GetVideoClient(); !reflect.DeepEqual(got, tt.want) {
+			if got := conf.GetVideoClient(); got == tt.want {
 				t.Errorf("GetVideoClient() = %v, want %v", got, tt.want)
 			}
 		})
@@ -54,7 +63,17 @@ func TestConfigVision_GetVisionClient(t *testing.T) {
 		fields fields
 		want   *vision.ImageAnnotatorClient
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Test no client",
+			fields: fields{
+				Ctx:      context.Background(),
+				Client:   nil,
+				Filename: "",
+				File:     nil,
+				GcsURI:   "",
+			},
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -65,7 +84,7 @@ func TestConfigVision_GetVisionClient(t *testing.T) {
 				File:     tt.fields.File,
 				GcsURI:   tt.fields.GcsURI,
 			}
-			if got := conf.GetVisionClient(); !reflect.DeepEqual(got, tt.want) {
+			if got := conf.GetVisionClient(); got == tt.want {
 				t.Errorf("GetVisionClient() = %v, want %v", got, tt.want)
 			}
 		})
@@ -77,11 +96,17 @@ func TestCreateConfVideo(t *testing.T) {
 		name string
 		want ConfigVideo
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Test",
+			want: ConfigVideo{
+				Ctx:    context.Background(),
+				Client: nil,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CreateConfVideo(); !reflect.DeepEqual(got, tt.want) {
+			if got := CreateConfVideo(); got.Client == tt.want.Client {
 				t.Errorf("CreateConfVideo() = %v, want %v", got, tt.want)
 			}
 		})
@@ -93,11 +118,17 @@ func TestCreateConfVision(t *testing.T) {
 		name string
 		want ConfigVision
 	}{
-		// TODO: Add test cases.
+		{
+			name: "Test",
+			want: ConfigVision{
+				Ctx:    context.Background(),
+				Client: nil,
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := CreateConfVision(); !reflect.DeepEqual(got, tt.want) {
+			if got := CreateConfVision(); got.Client == tt.want.Client {
 				t.Errorf("CreateConfVision() = %v, want %v", got, tt.want)
 			}
 		})
