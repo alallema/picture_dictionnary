@@ -56,6 +56,9 @@ func TestPostPicture(t *testing.T) {
 			}
 		})
 	}
+	for _, tt := range tests {
+		DelHSet("picture:" + tt.args.picture.Id)
+	}
 }
 
 func TestPostLabelByPicture(t *testing.T) {
@@ -175,6 +178,10 @@ func TestPostLabelByPicture(t *testing.T) {
 			}
 		})
 	}
+	DelAll("pictureIdLabel:")
+	for _, tt := range tests {
+		DelAll("pictureIdLabel:" + tt.args.id)
+	}
 }
 
 func TestPostLocalizedObjectByPicture(t *testing.T) {
@@ -288,6 +295,10 @@ func TestPostLocalizedObjectByPicture(t *testing.T) {
 			}
 		})
 	}
+	DelAll("pictureIdObject:")
+	for _, tt := range tests {
+		DelAll("pictureIdObject:" + tt.args.id)
+	}
 }
 
 func TestPostCreateLabel(t *testing.T) {
@@ -372,6 +383,12 @@ func TestPostCreateLabel(t *testing.T) {
 			}
 		})
 	}
+	DelHSet("labelDescr:")
+	DelMembersInSet("labelId", "")
+	for _, tt := range tests {
+		DelHSet("labelDescr:" + tt.args.id)
+		DelMembersInSet("labelId", tt.args.id)
+	}
 }
 
 func TestPostCreateObject(t *testing.T) {
@@ -431,7 +448,9 @@ func TestPostCreateObject(t *testing.T) {
 					Name:     "third test object",
 					Score:    0.44,
 				},
+				id: "object3",
 			},
+			want:    "third test object",
 			wantErr: nil,
 		},
 	}
@@ -447,6 +466,12 @@ func TestPostCreateObject(t *testing.T) {
 				t.Errorf("result = %v, want %v", got, tt.want)
 			}
 		})
+	}
+	DelHSet("objectDescr:")
+	DelMembersInSet("objectId", "")
+	for _, tt := range tests {
+		DelHSet("objectDescr:" + tt.args.id)
+		DelMembersInSet("objectId", tt.args.id)
 	}
 }
 
@@ -567,6 +592,10 @@ func TestPostPicturebyLabel(t *testing.T) {
 			}
 		})
 	}
+	DelAll("Id:")
+	for _, tt := range tests {
+		DelAll("Id:" + tt.args.id)
+	}
 }
 
 func TestPostPicturebyObject(t *testing.T) {
@@ -680,6 +709,10 @@ func TestPostPicturebyObject(t *testing.T) {
 			}
 		})
 	}
+	DelAll("Id:")
+	for _, tt := range tests {
+		DelAll("Id:" + tt.args.id)
+	}
 }
 
 func TestPostImageUrlbyLabel(t *testing.T) {
@@ -742,8 +775,8 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 				id: "label1",
 			},
 			want: []string{
-				"https://path/img_002.jpg",
 				"https://path/img_001.jpg",
+				"https://path/img_002.jpg",
 			},
 			wantErr: nil,
 		},
@@ -769,9 +802,9 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 				id: "label1",
 			},
 			want: []string{
-				"https://path/img_002.jpg",
 				"https://path/img_003.jpg",
 				"https://path/img_001.jpg",
+				"https://path/img_002.jpg",
 			},
 			wantErr: nil,
 		},
@@ -788,6 +821,9 @@ func TestPostImageUrlbyLabel(t *testing.T) {
 				t.Errorf("result = %v, want %v", got, tt.want)
 			}
 		})
+	}
+	for _, tt := range tests {
+		DelAll("URLId:" + tt.args.id)
 	}
 }
 
@@ -847,8 +883,8 @@ func TestPostImageUrlbyObject(t *testing.T) {
 				id: "object1",
 			},
 			want: []string{
-				"https://path/img_002.jpg",
 				"https://path/img_001.jpg",
+				"https://path/img_002.jpg",
 			},
 			wantErr: nil,
 		},
@@ -872,9 +908,9 @@ func TestPostImageUrlbyObject(t *testing.T) {
 				id: "object1",
 			},
 			want: []string{
-				"https://path/img_002.jpg",
 				"https://path/img_003.jpg",
 				"https://path/img_001.jpg",
+				"https://path/img_002.jpg",
 			},
 			wantErr: nil,
 		},
@@ -891,5 +927,8 @@ func TestPostImageUrlbyObject(t *testing.T) {
 				t.Errorf("result = %v, want %v", got, tt.want)
 			}
 		})
+	}
+	for _, tt := range tests {
+		DelAll("URLId:" + tt.args.id)
 	}
 }

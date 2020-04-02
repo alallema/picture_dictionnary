@@ -77,6 +77,9 @@ In order to bring up:
 
 - See README.md inside Api directory
 
+## Launch Test
+- make test
+
 ## To do
 
 - create logger error - api done - service todo
@@ -95,9 +98,6 @@ In order to bring up:
     - Detection
     - Indexation
     - Search indexation
-
-* Collector
-    - implement test
 
 * Web App
     - fix authentification for url (Chrome cors)

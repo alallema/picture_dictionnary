@@ -11,8 +11,8 @@ func Test_InitClient(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "pong test",
-			want: "PONG",
+			name:    "pong test",
+			want:    "PONG",
 			wantErr: false,
 		},
 	}
