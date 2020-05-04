@@ -1,11 +1,12 @@
-import React from "react";
-import { Grid, Image, Embed } from 'semantic-ui-react'
+import React, { useState } from "react";
+import { Grid, Image } from 'semantic-ui-react'
 
 const formatPictureArray = ["JPEG", "JPG", "PNG", "PNG8", "PNG24", "GIF", "BMP", "WEBP", "RAW", "ICO", "PDF", "TIFF"];
 const formatVideoArray = ["MOV", "MPEG4", "MP4", "AVI"];
 
 export default function PictureResult(props) {
   let { pictures } = props;
+  const [playing, togglePlayer] = useState(false);
 
   if (typeof pictures === "undefined"){
     pictures = []
@@ -13,6 +14,16 @@ export default function PictureResult(props) {
   
   const resultPictures = pictures.filter(picture => formatPictureArray.includes(picture.format.toUpperCase()));
   const resultVideos = pictures.filter(picture => formatVideoArray.includes(picture.format.toUpperCase()));
+
+  const handleHover = (e) => {
+    if (playing) {
+      e.target.pause();
+      e.target.fastSeek(0);
+    }
+    else
+      e.target.play()
+    togglePlayer(!playing)
+  }
 
   const pictureRows = resultPictures.map((picture) => (
     <Grid.Column key={picture.id}>
@@ -23,11 +34,9 @@ export default function PictureResult(props) {
   ));
   const videoRows = resultVideos.map((video) => (
     <Grid.Column key={video.id}>
-    <Embed
-      icon='right circle arrow'
-      placeholder=''
-      url={video.mainPictureURL}
-    />
+      <video controls width='250' muted onMouseOver={handleHover} onMouseOut={handleHover}>
+        <source src={video.mainPictureURL}></source>
+      </video>
     </Grid.Column>
   ));
   return (
