@@ -43,16 +43,18 @@ func (server *Server) AllObjects() *[]Tag {
 		log.Error().Err(err)
 	}
 	for _, objectId := range resultRequest {
-		object := server.Client.HGet("objectDescr:"+objectId, "en")
-		if object.Err() == redis.Nil {
-			log.Error().Err(err).Msg("object Id has no description")
-		} else {
-			tag := Tag{
-				Id:    objectId,
-				Title: object.Val(),
-				Type:  "category",
+		if (objectId != "") {
+			object := server.Client.HGet("objectDescr:"+objectId, "en")
+			if object.Err() == redis.Nil {
+				log.Error().Err(err).Msg("object Id has no description")
+			} else {
+				tag := Tag{
+					Id:    objectId,
+					Title: object.Val(),
+					Type:  "category",
+				}
+				objectList = append(objectList, tag)
 			}
-			objectList = append(objectList, tag)
 		}
 	}
 	return &objectList

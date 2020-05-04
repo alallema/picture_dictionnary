@@ -31,7 +31,7 @@ This is for now the only service to be independent
 
 * In **collector** we have an dev client who goint to request all files from cloud-storage
 
-* In **scraper**, not implement yet but has to scrap picture and video from differents sources. So they will be surely multiple scraper
+* In **scraper**, scrap picture and video from differents sources. So they will be surely multiple scraper
 
 **Docker** Have to be remade for now it's just launch redis datastore and api
 
@@ -44,7 +44,7 @@ This is for now the only service to be independent
 ### Instructions to launch Redis, Api and App
 
 In order to bring up:
-- Declare env var `export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"`
+
 - Use `docker-compose build` to build api
 - Use `docker-compose up` to see the logs of all the containers
 - Use `docker-compose up -d` if you want it to run in the foreground
@@ -78,11 +78,13 @@ In order to bring up:
 - See README.md inside Api directory
 
 ## Launch Test
+
 - make test
 
 ## To do
 
 - create logger error - api done - service todo
+- change general architecture schema
 
 * Client api vision
     - check picture size 20 Mo
@@ -103,10 +105,9 @@ In order to bring up:
     - fix authentification for url (Chrome cors)
     - create config in file and env
     - implement visualization video
-    - fix without result
     - drag and drop
 
 * Deploiement
-    - docker core/cmd
-    - docker scraper
+    - docker core/cmd + cron
+    - docker scraper + cron
     - launch makefile in CI
